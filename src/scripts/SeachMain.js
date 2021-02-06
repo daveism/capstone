@@ -20,37 +20,6 @@ const black = '#000000';
 const white = '#ffffff';
 const offWhite = '#EDEDED';
 
-window.addEventListener('keydown', (event) => (handleYNkeyPress(event)));
-let start = Date.now();
-let end = 0;
-let milliSeconds = 0;
-
-const handleYNkeyPress = (event) => {
-  let keypressed = '';
-  if (event.key) {
-    keypressed = event.key.toUpperCase();
-  } else {
-    keypressed = event.target.innerText.toUpperCase() === 'YES' ? 'Y' : 'N';
-  }
-
-  switch (keypressed) {
-    case 'Y':
-      end = Date.now();
-      milliSeconds = end - start;
-      console.log(`you answered yes in ${milliSeconds} ms`)
-      start = Date.now();
-      return keypressed;
-    case 'N':
-      end = Date.now();
-      milliSeconds = end - start;
-      console.log(`you answered no in ${milliSeconds} ms`)
-      start = Date.now();
-      return keypressed;
-    default:
-      return null;
-  }
-};
-
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(2),
@@ -227,6 +196,37 @@ export default function SearchMain() {
   useEffect(() => {
     // call when something changes
   }, []);
+
+  window.addEventListener('keydown', (event) => (handleYNkeyPress(event)));
+  let start = Date.now();
+  let end = 0;
+  let milliSeconds = 0;
+
+  const handleYNkeyPress = (event) => {
+    let keypressed = '';
+    if (event.key) {
+      keypressed = event.key.toUpperCase();
+    } else {
+      keypressed = event.target.innerText.toUpperCase() === 'YES' ? 'Y' : 'N';
+    }
+
+    switch (keypressed) {
+      case 'Y':
+        end = Date.now();
+        milliSeconds = end - start;
+        console.log(`you answered yes in ${milliSeconds} ms`)
+        start = Date.now();
+        return keypressed;
+      case 'N':
+        end = Date.now();
+        milliSeconds = end - start;
+        console.log(`you answered no in ${milliSeconds} ms`)
+        start = Date.now();
+        return keypressed;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={classes.root}>
