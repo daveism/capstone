@@ -1,0 +1,29 @@
+{
+  "extends": ["airbnb-base",
+  "plugin:react/recommended"],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "ignorePatterns": ["*.test*.js"],
+  "rules": {
+    "comma-dangle": ["error", "never"],
+    "no-underscore-dangle": ["off"],
+    "no-unused-vars": ["error", { "args": "none" }],
+    "operator-linebreak": ["error", "after"],
+    "import/prefer-default-export": 0,
+    "no-await-in-loop": ["off"],
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["elem","e","wrapper"] }],
+    "prefer-destructuring": ["error", {
+      "array": false,
+      "object": false
+    }, {
+      "enforceForRenamedProperties": false
+    }]
+  }
+}

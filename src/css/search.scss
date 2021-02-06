@@ -1,0 +1,12 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,600,700);
+$roboto:  Roboto, Helvetica, 'Helvetica Neue', Arial, sans-serif;
+$fontColor: #5C5C5C;
+
+html, body {
+  font-family: $roboto;
+}
+
+.search-holderofall, .root {
+  font-family: $roboto;
+  height: 100vh;
+}
