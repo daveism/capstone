@@ -38,6 +38,10 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$/,
+                use: "url-loader?limit=100000"
+            },
+            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {

@@ -9,4 +9,8 @@ html, body {
 .search-holderofall, .root {
   font-family: $roboto;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #EDEDED;
 }
