@@ -5,7 +5,7 @@ import SeachMain from './SeachMain';
 
 function App() {
   return (
-    <div className="search-holderofall">
+    <div>
       <SeachMain />
     </div>
   );

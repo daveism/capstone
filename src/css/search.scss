@@ -4,13 +4,17 @@ $fontColor: #5C5C5C;
 
 html, body {
   font-family: $roboto;
+  margin: 0px;
 }
 
-.search-holderofall, .root {
+.search-holderofall {
   font-family: $roboto;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #EDEDED;
+  @media only screen and (max-width: 500px) {
+    height: 100%;
+  }
 }
