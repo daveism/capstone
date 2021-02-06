@@ -158,7 +158,6 @@ const useStyles = makeStyles((theme) => ({
       height: '158px',
       width: '200px',
     }
-
   },
   searchMapImg: {
     borderRadius: '4px',
@@ -180,6 +179,9 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(1.5),
       marginBottom: theme.spacing(1),
     }
+  },
+  none: {
+    display: 'none',
   }
 }));
 
@@ -187,50 +189,59 @@ export default function SearchMain() {
 
   // set React state via React Hooks
   // used to detect the first call - for getting state from url
-  const [atStart, setAtStart] = useState(true);
+  const [key, setKey] = useState(true);
+  const [timestamp, _setTimestamp] = useState(Date.now());
+  const timestampeRef = React.useRef(timestamp);
+  const setTimestamp = data => {
+    timestampeRef.current = data;
+    _setTimestamp(data);
+  };
 
   const classes = useStyles();
 
-  // use the react effect to control when location and
-  // regions change to repopulate the climate variable pulldown
-  useEffect(() => {
-    // call when something changes
-  }, []);
+  const timeEllapsed = () => {
+    const end = Date.now();
+    return end - timestampeRef.current;
+  }
 
-  window.addEventListener('keydown', (event) => (handleYNkeyPress(event)));
-  let start = Date.now();
-  let end = 0;
-  let milliSeconds = 0;
-
-  const handleYNkeyPress = (event) => {
-    let keypressed = '';
-    if (event.key) {
-      keypressed = event.key.toUpperCase();
-    } else {
-      keypressed = event.target.innerText.toUpperCase() === 'YES' ? 'Y' : 'N';
-    }
-
+  const howAnswered = (keypressed) => {
     switch (keypressed) {
       case 'Y':
-        end = Date.now();
-        milliSeconds = end - start;
-        console.log(`you answered yes in ${milliSeconds} ms`)
-        start = Date.now();
+        const yesTime = timeEllapsed()
+        setTimestamp( Date.now());
+        console.log(`you answered yes in ${yesTime} ms`)
         return keypressed;
       case 'N':
-        end = Date.now();
-        milliSeconds = end - start;
-        console.log(`you answered no in ${milliSeconds} ms`)
-        start = Date.now();
+        const noTime = timeEllapsed()
+        setTimestamp( Date.now());
+        console.log(`you answered no in ${noTime} ms`)
         return keypressed;
       default:
         return null;
     }
+  }
+
+  const handleYNkeyPress = (event) => {
+    let keypressed = '';
+    if (event.key) {
+      howAnswered(event.key.toUpperCase())
+      return null;
+    } else {
+      howAnswered( event.target.innerText.toUpperCase() === 'YES' ? 'Y' : 'N')
+      return null;
+    }
   };
 
+  // use the react effect to control when location and
+  // regions change to repopulate the climate variable pulldown
+  useEffect(() => {
+    window.addEventListener('keydown', handleYNkeyPress);
+    return () => (window.removeEventListener('keydown', handleYNkeyPress));
+  }, []);
+
   return (
-    <div className={classes.root}>
-      <Grid container spacing={1} height='100%' >
+    <div  className={classes.root}>
+      <Grid  container spacing={1} height='100%' >
 
         <Grid container spacing={2} className={classes.searchMapsArea}>
           <Grid item xs={12} md={4} m={2}display='flex' flex={1}>
