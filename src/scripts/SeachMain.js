@@ -679,8 +679,8 @@ export default function SearchMain() {
       <p id="simple-modal-description" className={classes.nextTargetDescription}>
         It is important that you answer as quickly as you can. If the object does not exist on the map,
         you should answer no. If the object does exist on the map, you should answer yes. You can answer
-        yes or no by clicking the <strong>yes</strong> or <strong>no</strong> button or using
-        the <strong>'y'</strong> or <strong>'n'</strong> key on the keyboard.
+        yes or no by using the <strong>'y'</strong> or <strong>'n'</strong> key on the keyboard or
+        clicking the <strong>yes</strong> or <strong>no</strong> button.
       </p>
       <p id="simple-modal-description" className={classes.nextTargetDescriptionMobile}>
         This task will be more comfortable on a larger screen size. While it is not required, you
