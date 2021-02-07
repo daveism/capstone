@@ -12,6 +12,9 @@ import '../css/search.scss';
 
 //AWS s3 bucket with images
 const baseURL = 'http://capstone-images-daveism.s3-website-us-east-1.amazonaws.com/'
+const blankIMG = 'src/images/blank.png';
+const gestaltTarget = 'src/images/target-01.png';
+const notGestaltTarget = 'src/images/target-not-gestalt-01.png';
 
 // constants for layout
 const defaultSpacing = 16;
@@ -193,38 +196,107 @@ export default function SearchMain() {
 
   // set React state via React Hooks
   // used to detect the first call - for getting state from url
+  // most of these need a ref so we can use window key press
+  //   which enables the user use the y and n key for yes and no
   const [key, setKey] = useState(true);
+
   const [timestamp, _setTimestamp] = useState(Date.now());
-
-  const [yesNoDisabled, _setYesNoDisabled] = useState(true);
-  const [startDisabled, setStartDisabled] = useState(false);
-
-  const [randomMapsWithTargetGestalt, setRandomMapsWithTargetGestalt] = useState(RandomMaps());
-  const [randomMapsWithTargetNotGestalt, setRandomMapsWithTargetNotGestalt] = useState(RandomMaps());
-  const [randomMapsWithoutTarget, setRandomMapsWithoutTarget] = useState(RandomMaps());
-
-  const [RandomMapsClusteredWithTargetGestalt, setRandomMapsClusteredWithTargetGestalt] = useState(RandomClusteredMaps());
-  const [RandomMapsClusteredWithTargetNotGestalt, setRandomMapsClusteredWithTargetNotGestalt] = useState(RandomClusteredMaps());
-  const [RandomMapsClusteredWithoutTarget, setRandomMapsClusteredWithoutTarget] = useState(RandomClusteredMaps());
-
-  const [searchMapURL, setSearchMapURL] = useState();
-
-  const timestampeRef = React.useRef(timestamp);
+  const timestampRef = React.useRef(timestamp);
   const setTimestamp = data => {
-    timestampeRef.current = data;
+    timestampRef.current = data;
     _setTimestamp(data);
   };
 
+  const [yesNoDisabled, _setYesNoDisabled] = useState(true);
   const yesNoDisabledRef = React.useRef(yesNoDisabled);
   const setYesNoDisabled = data => {
     yesNoDisabledRef.current = data;
     _setYesNoDisabled(data);
   };
 
-  // const yesNoDisabled = data => {
-  //   yesNoDisabledRef.current = data;
-  //   _yesNoDisabled;
-  // };
+  const [startDisabled, _setStartDisabled] = useState(false);
+  const setStartDisabledRef = React.useRef(setStartDisabled);
+  const setStartDisabled = data => {
+    setStartDisabledRef.current = data;
+    _setStartDisabled(data);
+  };
+
+  // random noise background and target is gestalt
+  const [randomMapsWithTargetGestalt, _setRandomMapsWithTargetGestalt] = useState(RandomMaps());
+  const randomMapsWithTargetGestaltRef = React.useRef(randomMapsWithTargetGestalt);
+  const setRandomMapsWithTargetGestalt = data => {
+    randomMapsWithTargetGestaltRef.current = data;
+    _setRandomMapsWithTargetGestalt(data);
+  };
+
+  // random noise background and target is missing
+  const [randomMapsWithoutTargetGestalt, _setRandomMapsWithoutTargetGestalt] = useState(RandomMaps());
+  const randomMapsWithoutTargetGestaltRef = React.useRef(randomMapsWithoutTargetGestalt);
+  const setRandomMapsWithoutTargetGestalt = data => {
+    randomMapsWithoutTargetGestaltRef.current = data;
+    _setRandomMapsWithoutTargetGestalt(data);
+  };
+
+  // random noise background and target is not as gestalt
+  const [randomMapsWithTargetNotGestalt, _setRandomMapsWithTargetNotGestalt] = useState(RandomMaps());
+  const randomMapsWithTargetNotGestaltRef = React.useRef(randomMapsWithTargetNotGestalt);
+  const setRandomMapsWithTargetNotGestalt = data => {
+    randomMapsWithTargetNotGestaltRef.current = data;
+    _setRandomMapsWithTargetNotGestalt(data);
+  };
+
+  // random noise background and target is not as gestalt missng
+  const [randomMapsWithoutTargetNotGestalt, _setRandomMapsWithoutTargetNotGestalt] = useState(RandomMaps());
+  const randomMapsWithoutTargetNotGestaltRef = React.useRef(randomMapsWithoutTargetNotGestalt);
+  const setRandomMapsWithoutTargetNotGestalt = data => {
+    randomMapsWithoutTargetNotGestaltRef.current = data;
+    _setRandomMapsWithoutTargetNotGestalt(data);
+  };
+
+  const [randomMapsClusteredWithTargetGestalt, _setRandomMapsClusteredWithTargetGestalt] = useState(RandomClusteredMaps());
+  const randomMapsClusteredWithTargetGestaltRef = React.useRef(randomMapsClusteredWithTargetGestalt);
+  const setRandomMapsClusteredWithTargetGestalt = data => {
+    randomMapsClusteredWithTargetGestaltRef.current = data;
+    _setRandomMapsClusteredWithTargetGestalt(data);
+  };
+
+  const [randomMapsClusteredWithTargetNotGestalt, _setRandomMapsClusteredWithTargetNotGestalt] = useState(RandomClusteredMaps());
+  const randomMapsClusteredWithTargetNotGestaltRef = React.useRef(randomMapsClusteredWithTargetNotGestalt);
+  const setRandomMapsClusteredWithTargetNotGestalt = data => {
+    randomMapsClusteredWithTargetNotGestaltRef.current = data;
+    _setRandomMapsClusteredWithTargetNotGestalt(data);
+  };
+
+  const [randomMapsClusteredWithoutTarget, _setRandomMapsClusteredWithoutTarget] = useState(RandomClusteredMaps());
+  const randomMapsClusteredWithoutTargetRef = React.useRef(randomMapsClusteredWithoutTarget);
+  const setRandomMapsClusteredWithoutTarget = data => {
+    randomMapsClusteredWithoutTargetRef.current = data;
+    _setRandomMapsClusteredWithoutTarget(data);
+  };
+
+  const [searchMapURL, _setSearchMapURL] = useState(blankIMG);
+  const searchMapURLRef = React.useRef(searchMapURL);
+  const setSearchMapURL = data => {
+    searchMapURLRef.current = data;
+    _setSearchMapURL(data);
+  };
+
+  const [targetMap, _setTargetMap] = useState(true);
+  const targetMapRef = React.useRef(targetMap);
+  const setTargetMap = data => {
+    targetMapRef.current = data;
+    _setTargetMap(data);
+  };
+
+  const randomMapRefs = [
+    randomMapsWithTargetGestaltRef,
+    randomMapsWithoutTargetGestaltRef,
+  ];
+
+  const randomMapSets = [
+    setRandomMapsWithTargetGestalt,
+    setRandomMapsWithoutTargetGestalt,
+  ];
 
   // generate ranom numbers to pull in map
   const getRandomMap = (mapArray) => {
@@ -245,39 +317,56 @@ export default function SearchMain() {
     }
   }
 
-  // gets the net map
-  const getNextMap = () => {
+  // get with or without target array used to retreive the correct map
+  const getWithORwithout = (withORwithout) => (withORwithout === 'with' ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20] : [0] );
 
+  const nextMapURL = (props) => {
     // get target name none or 1-20
-    const possibleTarget = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+    const { ref, set, useWith } = props;
+
+    const possibleTarget = getWithORwithout(useWith);
+
     const targetNumber = getRandomMap(possibleTarget);
     const targetName = getTargetName(targetNumber);
 
     // get map name (without target)
-    const mapName = getRandomMap(randomMapsWithTargetGestalt);
-    const newMapArray = removeRandomNumber(randomMapsWithTargetGestalt, mapName);
+    const mapName = getRandomMap(ref.current);
+    const newMapArray = removeRandomNumber(ref.current, mapName);
 
     // remove from array so we don't use it again
-    setRandomMapsWithTargetGestalt(newMapArray);
+    set(newMapArray);
 
     const mapURL = `${baseURL}${targetName}${mapName}.png`;
     setSearchMapURL(mapURL);
+
+    console.log('array with is this long: ', ref.current.length)
+    console.log('current map: ', mapName)
+    console.log('at: ', mapURL)
 
     // return map name
     return mapURL;
   }
 
-  //  check iof done with random maps with normal target
-  const randomMapsTargetGestaltDone = () => {
-    if (randomMapsWithTargetGestalt.length > 0 && randomMapsWithoutTarget.length > 0) return true;
-    if (randomMapsWithTargetGestalt.length > 0 && randomMapsWithoutTarget.length > 0) return true;
-    return false;
-  }
+  // gets the net map
+  const getNextMap = () => {
+    const targetYesNo = getRandomMap([0,1]);
+    const useWith = targetYesNo ? 'with' : 'without' ;
+    const ref = randomMapRefs[targetYesNo];
+    const set =  randomMapSets[targetYesNo];
+    const otherRef = randomMapRefs[targetYesNo ? 0 : 1];
 
-  //  check iof done with random maps with not gestalt target
-  const randomMapsTargetNotGestaltDone = () => {
-    if (randomMapsWithTargetNotGestalt.length > 0 && randomMapsWithoutTarget.length > 0) return true;
-    return false;
+    if (ref.current.length === 0 && otherRef.current.length === 0) {
+      window.removeEventListener('keydown', handleYNkeyPress);
+      setYesNoDisabled(true);
+      setStartDisabled(false);
+      setSearchMapURL(blankIMG);
+      return null;
+    }
+
+    nextMapURL({ref, set, useWith});
+    if (ref.current.length === 0) getNextMap();
+    return null;
   }
 
 
@@ -285,10 +374,11 @@ export default function SearchMain() {
 
   const timeEllapsed = () => {
     const end = Date.now();
-    return end - timestampeRef.current;
+    return end - timestampRef.current;
   }
 
   const howAnswered = (keypressed) => {
+    if (yesNoDisabledRef.current) return null;
     switch (keypressed) {
       case 'Y':
         const yesTime = timeEllapsed()
@@ -307,8 +397,8 @@ export default function SearchMain() {
     }
   }
 
+  // when subject clicks the start button
   const handleStart = (event) => {
-
     setYesNoDisabled(false);
     setStartDisabled(true);
     window.addEventListener('keydown', handleYNkeyPress);
@@ -327,9 +417,9 @@ export default function SearchMain() {
     }
   };
 
-  // use the react effect to control when location and
-  // regions change to repopulate the climate variable pulldown
+  // use the react effect to allow the y and n key to be pressed
   useEffect(() => {
+    // window.addEventListener('keydown', handleYNkeyPress);
     return () => (window.removeEventListener('keydown', handleYNkeyPress));
   }, []);
 
@@ -346,7 +436,7 @@ export default function SearchMain() {
               </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.targetMapGrid}>
                 <Box display='flex' flexDirection='row' flex={1} justifyContent='center' alignItems="center" className={classes.targetMapHolder}>
-                  <img src="src/img/target-01.png" alt="test" className={classes.targetMapImg}/>
+                  <img src="src/images/target-01.png" alt="test" className={classes.targetMapImg}/>
                 </Box>
               </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.statTitle}>
