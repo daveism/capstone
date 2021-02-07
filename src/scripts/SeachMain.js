@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import Modal from '@material-ui/core/Modal';
+
 import RandomMaps from './RandomMaps';
 import RandomClusteredMaps from './RandomClusteredMaps';
 // css
@@ -84,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   targetMapHolder: {
-    backgroundColor: '#EDEDED',
+    backgroundColor: offWhite,
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     borderRadius: '4px',
@@ -189,6 +191,22 @@ const useStyles = makeStyles((theme) => ({
   },
   none: {
     display: 'none',
+  },
+  nextTargetModal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  nextTargetInfo: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  nextTargetInfoCenter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 }));
 
@@ -288,14 +306,13 @@ export default function SearchMain() {
     _setTargetMapURL(data);
   };
 
-  // random-gestalt, random-not-gestalt, random-clustered-gestalt, random-clustered--not-gestalt
+  // random-gestalt, random-not-gestalt, random-clustered-gestalt, random-clustered-not-gestalt
   const [series, _setSeries] = useState('random-gestalt');
   const seriesRef = React.useRef(series);
   const setSeries = data => {
     seriesRef.current = data;
     _setSeries(data);
   };
-
 
   // blank string or -not-gestalt
   const [targetExtra, _setTargetExtra] = useState('');
@@ -319,6 +336,18 @@ export default function SearchMain() {
     _setMapSets(data);
   };
 
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
   // generate ranom numbers to pull in map
   const getRandomMap = (mapArray) => {
     const mapNumber = Math.floor(Math.random() * mapArray.length);
@@ -330,6 +359,7 @@ export default function SearchMain() {
     return array.filter( (value) => (value != mapName))
   }
 
+  // sets/gets targetname based on three target types, non, gestalt, and not gestalt
   const getTargetName = (target) => {
     if (target === 0) return 'target-none-';
     if (target => 1) {
@@ -384,6 +414,7 @@ export default function SearchMain() {
       setSearchMapURL(blankIMG);
       setTargetMapURL(notGestaltTarget);
       setSeries('random-not-gestalt') // kicks of use effect
+      setOpen(true);
       return null;
     }
 
@@ -436,7 +467,7 @@ export default function SearchMain() {
         setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
         setTargetExtra('');
         return undefined;
-      case 'random-clustered--not-gestalt':
+      case 'random-clustered-not-gestalt':
         setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
         setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
         setTargetExtra('-not-gestalt');
@@ -469,6 +500,24 @@ export default function SearchMain() {
       return null;
     }
   };
+
+  const body = (
+      <div className={classes.nextTargetInfo}>
+        <h2 id="simple-modal-title">Next Target</h2>
+        <p id="simple-modal-description">
+          You are now looking for:
+        </p>
+        <div className={classes.nextTargetInfoCenter}>
+          <img src={targetMapURL} alt="test" className={classes.targetMapImg}/>
+        </div>
+        <p id="simple-modal-description">
+          To begin the next series close this box and then click start.
+        </p>
+        <div className={classes.nextTargetInfoCenter}>
+          <Button onClick={handleClose} color="primary" variant="contained" >Close</Button>
+        </div>
+      </div>
+    );
 
   // use the react effect to allow the y and n key to be pressed
   useEffect(() => {
@@ -545,6 +594,9 @@ export default function SearchMain() {
         </Grid>
 
       </Grid>
+      <Modal open={open} onClose={handleClose}   className={classes.nextTargetModal} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" >
+        {body}
+      </Modal>
     </div>
   );
 }
