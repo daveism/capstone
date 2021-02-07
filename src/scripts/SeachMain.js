@@ -6,11 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import RandomMaps from './RandomMaps';
-
+import RandomClusteredMaps from './RandomClusteredMaps';
 // css
 import '../css/search.scss';
 
-const RandomMaps = RandomMaps();
+//AWS s3 bucket with images
+const baseURL = 'http://capstone-images-daveism.s3-website-us-east-1.amazonaws.com/'
 
 // constants for layout
 const defaultSpacing = 16;
@@ -195,33 +196,18 @@ export default function SearchMain() {
   const [key, setKey] = useState(true);
   const [timestamp, _setTimestamp] = useState(Date.now());
 
+  const [yesNoDisabled, _setYesNoDisabled] = useState(true);
+  const [startDisabled, setStartDisabled] = useState(false);
 
-  // const totalRandomLevel = [1,2,3,4,5];
-  // const totalRandomColor = [1,2,3,4];
-  // const totalRandomBasemaps = [1,2,3,4];
-  // const totalRandomTargets = [1,2,3];
-  // const totalRandomTargetstLocation = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
-  //
-  // const totalRandomClusteredSize = [1,2,3];
-  // const totalRandomClusteredEdges = [1,2];
-  // const totalRandomClusteredColors = [1,2,3,4];
-  // const totalRandomClusteredBasemaps = [1,2,3,4];
-  // const totalRandomClusteredTargets = [1,2,3];
-  // const totalRandomClusteredTargetLocation = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
-  //
-  // // const [usedRandomLevels, setUsedRandomLevels] = useState(totalRandomLevel);
-  // const [usedRandomColors, setUsedRandomColors] = useState(totalRandomColor);
-  // const [usedRandomBasemaps, setUsedRandomBasemaps] = useState(totalRandomBasemaps);
-  // const [usedRandomTargetsG, setUsedRandomTargetsG] = useState(totalRandomTargetsG);
-  // const [usedRandomTargetsNG, setUsedRandomTargetsNG] = useState(totalRandomTargetsNG);
-  //
-  // const [usedRandomClusteredSizes, setUsedRandomClusteredSizes] = useState([]);
-  // const [usedRandomClusteredEdges, setUsedRandomClusteredEdges] = useState([]);
-  // const [usedRandomClusteredColors, setUsedRandomClusteredColors] = useState([]);
-  // const [usedRandomClusteredBasemaps, setUsedRandomClusteredBasemaps] = useState([]);
-  // const [usedRandomClusteredTargetsG, setUsedRandomClusteredTargetsG] = useState(totalRandomClusteredTargetsG);
-  // const [usedRandomClusteredTargetsNG, setUsedRandomClusteredTargetsNG] = useState(totalRandomClusteredTargetsNG);
+  const [randomMapsWithTargetGestalt, setRandomMapsWithTargetGestalt] = useState(RandomMaps());
+  const [randomMapsWithTargetNotGestalt, setRandomMapsWithTargetNotGestalt] = useState(RandomMaps());
+  const [randomMapsWithoutTarget, setRandomMapsWithoutTarget] = useState(RandomMaps());
 
+  const [RandomMapsClusteredWithTargetGestalt, setRandomMapsClusteredWithTargetGestalt] = useState(RandomClusteredMaps());
+  const [RandomMapsClusteredWithTargetNotGestalt, setRandomMapsClusteredWithTargetNotGestalt] = useState(RandomClusteredMaps());
+  const [RandomMapsClusteredWithoutTarget, setRandomMapsClusteredWithoutTarget] = useState(RandomClusteredMaps());
+
+  const [searchMapURL, setSearchMapURL] = useState();
 
   const timestampeRef = React.useRef(timestamp);
   const setTimestamp = data => {
@@ -229,74 +215,71 @@ export default function SearchMain() {
     _setTimestamp(data);
   };
 
-
-  const baseURL = 'http://capstone-images-daveism.s3-website-us-east-1.amazonaws.com/'
-
-  // generare ranom numbers to pull in map
-  const getRandomNumber = (array) => {
-    const num = Math.floor(Math.random() * array.length);
-    return array[num];
+  const yesNoDisabledRef = React.useRef(yesNoDisabled);
+  const setYesNoDisabled = data => {
+    yesNoDisabledRef.current = data;
+    _setYesNoDisabled(data);
   };
 
-  const removeRandomNumber = (array, number) => {
-    return array.filter( (value) => (value != number))
+  // const yesNoDisabled = data => {
+  //   yesNoDisabledRef.current = data;
+  //   _yesNoDisabled;
+  // };
+
+  // generate ranom numbers to pull in map
+  const getRandomMap = (mapArray) => {
+    const mapNumber = Math.floor(Math.random() * mapArray.length);
+    return mapArray[mapNumber];
+  };
+
+  // remove map from array
+  const removeRandomNumber = (array, mapName) => {
+    return array.filter( (value) => (value != mapName))
   }
 
-
-  const getTargetRandomName = (target) => {
+  const getTargetName = (target) => {
     if (target === 0) return 'target-none-';
     if (target => 1) {
-      const targetNumber = target.toString().length < 2 ? `0 ${target.toString()}` : target.toString();
+      const targetNumber = target.toString().length < 2 ? `0${target.toString()}` : target.toString();
       return `target-${targetNumber}-`;
     }
   }
-  //
-  // const getBaseMapName = (basemap) => {
-  //   switch (basemap) {
-  //     case 1:
-  //       return 'basemap-none';
-  //     case 2:
-  //       return 'basemap-dark';
-  //     case 3:
-  //       return 'basemap-streets';
-  //     case 4:
-  //       return 'basemap-imagery';
-  //     default:
-  //       return 'basemap-none';
-  //   }
-  // }
-  //
-  // const getRandomLevelName = (distractor) => {
-  //   switch (distractor) {
-  //     case 1:
-  //       return 'random-all-distractor-';
-  //     case 2:
-  //       return 'random-high-distractor-';
-  //     case 3:
-  //       return 'random-med-distractor-';
-  //     case 4:
-  //       return 'random-low-distractor-';
-  //     case 5:
-  //       return 'no-distractor-';
-  //     default:
-  //       return 'random-all-distractor-';
-  //   }
-  // }
-  //
-  // const getRandomLColorName = (color) => {
-  //   switch (color) {
-  //     case 1:
-  //       return 'color-mixed-';
-  //     case 2:
-  //       return 'color-matches_target-';
-  //     case 3:
-  //       return 'color-red-';
-  //     case 4:
-  //       return 'color-blue-';
-  //     default:
-  //       return 'random-all-distractor-';
-  //   }
-  // }
+
+  // gets the net map
+  const getNextMap = () => {
+
+    // get target name none or 1-20
+    const possibleTarget = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    const targetNumber = getRandomMap(possibleTarget);
+    const targetName = getTargetName(targetNumber);
+
+    // get map name (without target)
+    const mapName = getRandomMap(randomMapsWithTargetGestalt);
+    const newMapArray = removeRandomNumber(randomMapsWithTargetGestalt, mapName);
+
+    // remove from array so we don't use it again
+    setRandomMapsWithTargetGestalt(newMapArray);
+
+    const mapURL = `${baseURL}${targetName}${mapName}.png`;
+    setSearchMapURL(mapURL);
+
+    // return map name
+    return mapURL;
+  }
+
+  //  check iof done with random maps with normal target
+  const randomMapsTargetGestaltDone = () => {
+    if (randomMapsWithTargetGestalt.length > 0 && randomMapsWithoutTarget.length > 0) return true;
+    if (randomMapsWithTargetGestalt.length > 0 && randomMapsWithoutTarget.length > 0) return true;
+    return false;
+  }
+
+  //  check iof done with random maps with not gestalt target
+  const randomMapsTargetNotGestaltDone = () => {
+    if (randomMapsWithTargetNotGestalt.length > 0 && randomMapsWithoutTarget.length > 0) return true;
+    return false;
+  }
+
 
   const classes = useStyles();
 
@@ -311,15 +294,26 @@ export default function SearchMain() {
         const yesTime = timeEllapsed()
         setTimestamp( Date.now());
         console.log(`you answered yes in ${yesTime} ms`)
+        getNextMap();
         return keypressed;
       case 'N':
         const noTime = timeEllapsed()
         setTimestamp( Date.now());
         console.log(`you answered no in ${noTime} ms`)
+        getNextMap();
         return keypressed;
       default:
         return null;
     }
+  }
+
+  const handleStart = (event) => {
+
+    setYesNoDisabled(false);
+    setStartDisabled(true);
+    window.addEventListener('keydown', handleYNkeyPress);
+    setTimestamp( Date.now());
+    getNextMap();
   }
 
   const handleYNkeyPress = (event) => {
@@ -336,7 +330,6 @@ export default function SearchMain() {
   // use the react effect to control when location and
   // regions change to repopulate the climate variable pulldown
   useEffect(() => {
-    window.addEventListener('keydown', handleYNkeyPress);
     return () => (window.removeEventListener('keydown', handleYNkeyPress));
   }, []);
 
@@ -378,7 +371,7 @@ export default function SearchMain() {
               </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.searchMapGrid}>
                 <Box display='flex' flexDirection='row' flex={1} justifyContent='center' alignItems="center" className={classes.searchMapHolder} >
-                  <img src="src/img/target-01-distractor-clustered--large_rough-distractor-color-blue-basemap-streets.png" alt="test" className={classes.searchMapImg}/>
+                  <img src={searchMapURL} className={classes.searchMapImg}/>
                 </Box>
               </Grid>
             </Grid>
@@ -390,18 +383,19 @@ export default function SearchMain() {
         <Grid container spacing={2} className={classes.buttonsYesNoArea}>
 
           <Grid item xs={12} md={4} display='flex' flex={1} className={classes.spaceRow}>
-            <Box display='flex' flexDirection='row' m={2} flex={1}>
+            <Box display='flex' flexDirection='row' m={1} flex={1}>
+              <Button onClick={handleStart} disabled={startDisabled} variant="contained" color="primary" className={classes.buttonsYesNo} height='100%'>Start</Button>
             </Box>
           </Grid>
 
           <Grid item xs={6} md={4} display='flex' flex={1}>
             <Box display='flex' flexDirection='row' m={1} flex={1} className={classes.buttonYesBox}>
-              <Button onClick={handleYNkeyPress} variant="contained" value='Y' className={classes.buttonsYesNo} height='100%'>Yes</Button>
+              <Button onClick={handleYNkeyPress} disabled={yesNoDisabled} variant="contained" value='Y' className={classes.buttonsYesNo} height='100%'>Yes</Button>
             </Box>
           </Grid>
           <Grid item xs={6} md={4} display='flex' flex={1}>
             <Box display='flex' flexDirection='row' m={1} flex={1} className={classes.buttonNoBox}>
-              <Button onClick={handleYNkeyPress} variant="contained" value='N' className={classes.buttonsYesNo} height='100%'>No</Button>
+              <Button onClick={handleYNkeyPress} disabled={yesNoDisabled} variant="contained" value='N' className={classes.buttonsYesNo} height='100%'>No</Button>
             </Box>
           </Grid>
 
