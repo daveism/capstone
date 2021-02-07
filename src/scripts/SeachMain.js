@@ -45,6 +45,18 @@ const useStyles = makeStyles((theme) => ({
   mainTitle: {
     height: `${titleHeight}px`,
   },
+  buttonsDirecton: {
+    width: '296px',
+    height: `${buttonHeight}px`,
+    fontSize: '1.5rem',
+    fontWeight: 'normal',
+    marginTop: theme.spacing(0),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
+  },
   buttonsYesNo: {
     width: '100%',
     height: `${buttonHeight}px`,
@@ -66,10 +78,11 @@ const useStyles = makeStyles((theme) => ({
   sideMapsHolder: {
     height: '100%'
   },
-  searchMapsHolder: {
+  searchMapsGrid: {
     height: '100%',
     [theme.breakpoints.down('sm')]: {
-      height: 'unset'
+      height: 'unset',
+      order: 5
     }
   },
   searchMapGrid: {
@@ -116,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   statTitle: {
-    height: '125px',
+    height: '75px',
     display: 'flex',
     alignItems: 'flex-end',
     [theme.breakpoints.down('sm')]: {
@@ -178,9 +191,20 @@ const useStyles = makeStyles((theme) => ({
       paddingLeft: theme.spacing(4),
     }
   },
-  spaceRow : {
+  StartGrid: {
     [theme.breakpoints.down('sm')]: {
-      display: 'none'
+      marginTop: `${theme.spacing(1)} !important`,
+      paddingTop: `${theme.spacing(0)} !important`,
+      order: 7,
+    }
+  },
+  yesNoGrid: {
+    [theme.breakpoints.down('sm')]: {
+      marginTop: `${theme.spacing(1)} !important`,
+      paddingTop: `${theme.spacing(0)} !important`,
+      marginBottom: `${theme.spacing(1)} !important`,
+      paddingBottom: `${theme.spacing(0)} !important`,
+      order: 6,
     }
   },
   h3: {
@@ -198,6 +222,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   nextTargetInfo: {
+    width: '50%',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+    },
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
     boxShadow: theme.shadows[5],
@@ -207,6 +235,70 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  nextTargetDescription: {
+    marginBottom: theme.spacing(2),
+  },
+  nextTargetDescriptionMobile: {
+    marginBottom: theme.spacing(2),
+    display: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'block',
+    }
+  },
+  aggreementModal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  AggreementInfo: {
+    width: '50%',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+    },
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  AggreementInfoTitle: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '1.2em',
+      marginBottom: theme.spacing(.5),
+    }
+  },
+  AggreementInfoDecription: {
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.85em',
+      marginBottom: theme.spacing(.5),
+    }
+  },
+  AggreementInfoContact: {
+    fontSize: '.85rem',
+    marginBottom: theme.spacing(3),
+    fontStyle: 'italic',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.65rem',
+    }
+  },
+  AggreementCenter: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      flexWrap: 'wrap',
+    }
+
+  },
+  aggreeButton: {
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      marginTop: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      width: '100%',
+    }
   }
 }));
 
@@ -232,7 +324,7 @@ export default function SearchMain() {
     _setYesNoDisabled(data);
   };
 
-  const [startDisabled, _setStartDisabled] = useState(false);
+  const [startDisabled, _setStartDisabled] = useState(true);
   const setStartDisabledRef = React.useRef(setStartDisabled);
   const setStartDisabled = data => {
     setStartDisabledRef.current = data;
@@ -337,16 +429,29 @@ export default function SearchMain() {
   };
 
 
-  const [open, setOpen] = React.useState(false);
+  const [openNext, setOpenNext] = React.useState(false);
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpenNext = () => {
+    setOpenNext(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseNext = () => {
+    setOpenNext(false);
   };
 
+  const [openAggreement, setOpenAggreement] = React.useState(true);
+
+  const handleDisaggree = () => {
+    setYesNoDisabled(true);
+    setStartDisabled(true);
+    setOpenAggreement(false);
+  }
+
+  const handleAggree = () => {
+    setStartDisabled(false);
+    setOpenAggreement(false);
+    setOpenNext(true);
+  }
 
   // generate ranom numbers to pull in map
   const getRandomMap = (mapArray) => {
@@ -414,7 +519,7 @@ export default function SearchMain() {
       setSearchMapURL(blankIMG);
       setTargetMapURL(notGestaltTarget);
       setSeries('random-not-gestalt') // kicks of use effect
-      setOpen(true);
+      setOpenNext(true);
       return null;
     }
 
@@ -501,23 +606,63 @@ export default function SearchMain() {
     }
   };
 
-  const body = (
-      <div className={classes.nextTargetInfo}>
-        <h2 id="simple-modal-title">Next Target</h2>
-        <p id="simple-modal-description">
-          You are now looking for:
-        </p>
-        <div className={classes.nextTargetInfoCenter}>
-          <img src={targetMapURL} alt="test" className={classes.targetMapImg}/>
-        </div>
-        <p id="simple-modal-description">
-          To begin the next series close this box and then click start.
-        </p>
-        <div className={classes.nextTargetInfoCenter}>
-          <Button onClick={handleClose} color="primary" variant="contained" >Close</Button>
-        </div>
+  const bodyNext = (
+    <div className={classes.nextTargetInfo}>
+      <h2 id="simple-modal-title">Directions</h2>
+      <p id="simple-modal-description" className={classes.nextTargetDescription}>
+        You are looking for the following object in the map
+      </p>
+      <div className={classes.nextTargetInfoCenter}>
+        <img src={targetMapURL} alt="test" className={classes.targetMapImg}/>
       </div>
-    );
+      <p id="simple-modal-description" className={classes.nextTargetDescription}>
+        It is important that you answer as quickly as you can. If the object does not exist on the map,
+        you should answer no. If the object does exist on the map, you should answer yes. You can answer
+        yes or no by clicking the <strong>yes</strong> or <strong>no</strong> button or using
+        the <strong>'y'</strong> or <strong>'n'</strong> key on the keyboard.
+      </p>
+      <p id="simple-modal-description" className={classes.nextTargetDescriptionMobile}>
+        This task will be more comfortable on a larger screen size. While it is not required, you
+        may want to consider switching to a larger screen such as a tablet, a laptop, or a secondary monitor.
+      </p>
+      <p id="simple-modal-description" className={classes.nextTargetDescription}>
+        To begin the close this box and then click  <strong>Start Experiment</strong>.
+      </p>
+      <div className={classes.nextTargetInfoCenter}>
+        <Button onClick={handleCloseNext} color="primary" variant="contained" >Close</Button>
+      </div>
+    </div>
+  );
+
+  const bodyAggreement = (
+    <div className={classes.AggreementInfo}>
+      <h2 id="simple-modal-title" className={classes.AggreementInfoTitle}>Study Participation Aggreement</h2>
+      <p id="simple-modal-description" className={classes.AggreementInfoDecription}>
+        Thank you for taking part in this study. By using the following website, you are agreeing to participate in
+        a study about how people use web-presented maps.  We will collect information about your
+        interactions with this site but not any personally identifiable information. The only people with access
+        to the study data will the researchers. However, the data will be summarized, shared, and disseminated
+        in talks, blogs, and possibly research journals. There is no cost to you to participate in this research
+        study and you will not be compensated. There are no known risks in the following tasks.
+      </p>
+      <p id="simple-modal-description" className={classes.AggreementInfoDecription}>
+        By agreeing to this, you have acknowledged that you have read the contents of this consent, are an
+        adult over 18 years of age, and you are giving consent to participate in this study
+      </p>
+      <p id="simple-modal-contact" className={classes.AggreementInfoContact}>
+        The researchers conducting this study are Michael Neelon, PhD and
+        David Michelson. For questions or more information concerning this
+        research you may contact Dr. Neelon at 828-250-2359 or mneelon@unca.edu,
+        or David Michelson at dmichels@unca.edu.  If you have any questions about your
+        rights as a research subject, you may contact the UNC Asheville Institutional
+        Review Board at 828.251.6313 or irb@unca.edu.
+      </p>
+      <div className={classes.AggreementCenter}>
+        <Button onClick={handleAggree} className={classes.aggreeButton} color="primary" variant="contained" >I aggree</Button>
+        <Button onClick={handleDisaggree} className={classes.aggreeButton} color="default" variant="contained" >I do not aggree</Button>
+      </div>
+    </div>
+  );
 
   // use the react effect to allow the y and n key to be pressed
   useEffect(() => {
@@ -533,14 +678,15 @@ export default function SearchMain() {
           <Grid item xs={12} md={4} m={2}display='flex' flex={1}>
 
             <Grid container spacing={0} className={classes.sideMapsHolder}>
-              <Grid item xs={12} display='flex' flex={1} className={classes.targetTitle}>
-                <h3  className={classes.h3}>Look for this object</h3>
+              <Grid onClick={handleOpenNext} item xs={12} display='flex' flex={1} className={classes.targetTitle}>
+                <h3 className={classes.h3}>Look for this object</h3>
               </Grid>
-              <Grid item xs={12} display='flex' flex={1} className={classes.targetMapGrid}>
+              <Grid onClick={handleOpenNext} item xs={12} display='flex' flex={1} className={classes.targetMapGrid}>
                 <Box display='flex' flexDirection='row' flex={1} justifyContent='center' alignItems="center" className={classes.targetMapHolder}>
                   <img src={targetMapURL} alt="test" className={classes.targetMapImg}/>
                 </Box>
               </Grid>
+              <Button onClick={handleOpenNext} variant="contained" color="default" className={classes.buttonsDirecton} height='100%'>Directions</Button>
               <Grid item xs={12} display='flex' flex={1} className={classes.statTitle}>
                 <h3  className={classes.h3}>Your stats</h3>
               </Grid>
@@ -556,7 +702,7 @@ export default function SearchMain() {
 
           </Grid>
 
-          <Grid item xs={12} md={8} display='flex' flex={1} className={classes.searchMapsHolder}>
+          <Grid item xs={12} md={8} display='flex' flex={1} className={classes.searchMapsGrid}>
             <Grid container spacing={0} display='flex'>
               <Grid item xs={12} display='flex' flex={1}  className={classes.searchMapsTitle}>
                 <h3  className={classes.h3}>On this map</h3>
@@ -574,18 +720,18 @@ export default function SearchMain() {
 
         <Grid container spacing={2} className={classes.buttonsYesNoArea}>
 
-          <Grid item xs={12} md={4} display='flex' flex={1} className={classes.spaceRow}>
+          <Grid item xs={12} md={4} display='flex' flex={1} className={classes.StartGrid}>
             <Box display='flex' flexDirection='row' m={1} flex={1}>
-              <Button onClick={handleStart} disabled={startDisabled} variant="contained" color="primary" className={classes.buttonsYesNo} height='100%'>Start</Button>
+              <Button onClick={handleStart} disabled={startDisabled} variant="contained" color="primary" className={classes.buttonsYesNo} height='100%'>Start Experiment</Button>
             </Box>
           </Grid>
 
-          <Grid item xs={6} md={4} display='flex' flex={1}>
+          <Grid item xs={6} md={4} display='flex' flex={1} className={classes.yesNoGrid}>
             <Box display='flex' flexDirection='row' m={1} flex={1} className={classes.buttonYesBox}>
               <Button onClick={handleYNkeyPress} disabled={yesNoDisabled} variant="contained" value='Y' className={classes.buttonsYesNo} height='100%'>Yes</Button>
             </Box>
           </Grid>
-          <Grid item xs={6} md={4} display='flex' flex={1}>
+          <Grid item xs={6} md={4} display='flex' flex={1} className={classes.yesNoGrid}>
             <Box display='flex' flexDirection='row' m={1} flex={1} className={classes.buttonNoBox}>
               <Button onClick={handleYNkeyPress} disabled={yesNoDisabled} variant="contained" value='N' className={classes.buttonsYesNo} height='100%'>No</Button>
             </Box>
@@ -594,8 +740,11 @@ export default function SearchMain() {
         </Grid>
 
       </Grid>
-      <Modal open={open} onClose={handleClose}   className={classes.nextTargetModal} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" >
-        {body}
+      <Modal open={openNext} onClose={handleCloseNext} className={classes.nextTargetModal} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" >
+        {bodyNext}
+      </Modal>
+      <Modal open={openAggreement} onClose={handleDisaggree} className={classes.aggreementModal} aria-labelledby="simple-modal-title" aria-describedby="simple-modal-description" >
+        {bodyAggreement}
       </Modal>
     </div>
   );
