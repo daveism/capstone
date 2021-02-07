@@ -1,5 +1,4 @@
 // TODO:
-//    * switch clustered
 //    * data recorder
 //    * remove duplicate fuill color images
 //    * get and display stats
