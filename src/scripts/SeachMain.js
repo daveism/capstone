@@ -370,11 +370,22 @@ export default function SearchMain() {
     _setRandomMapsWithoutTargetNotGestalt(data);
   };
 
+  //
+  //
+  //
+  // clustered
   const [randomMapsClusteredWithTargetGestalt, _setRandomMapsClusteredWithTargetGestalt] = useState(RandomClusteredMaps());
   const randomMapsClusteredWithTargetGestaltRef = React.useRef(randomMapsClusteredWithTargetGestalt);
   const setRandomMapsClusteredWithTargetGestalt = data => {
     randomMapsClusteredWithTargetGestaltRef.current = data;
     _setRandomMapsClusteredWithTargetGestalt(data);
+  };
+
+  const [randomMapsClusteredWithoutTargetGestalt, _setRandomMapsClusteredWithoutTargetGestalt] = useState(RandomClusteredMaps());
+  const randomMapsClusteredWithoutTargetGestaltRef = React.useRef(randomMapsClusteredWithoutTargetGestalt);
+  const setRandomMapsClusteredWithoutTargetGestalt = data => {
+    randomMapsClusteredWithoutTargetGestaltRef.current = data;
+    _setRandomMapsClusteredWithoutTargetGestalt(data);
   };
 
   const [randomMapsClusteredWithTargetNotGestalt, _setRandomMapsClusteredWithTargetNotGestalt] = useState(RandomClusteredMaps());
@@ -384,11 +395,11 @@ export default function SearchMain() {
     _setRandomMapsClusteredWithTargetNotGestalt(data);
   };
 
-  const [randomMapsClusteredWithoutTarget, _setRandomMapsClusteredWithoutTarget] = useState(RandomClusteredMaps());
-  const randomMapsClusteredWithoutTargetRef = React.useRef(randomMapsClusteredWithoutTarget);
-  const setRandomMapsClusteredWithoutTarget = data => {
-    randomMapsClusteredWithoutTargetRef.current = data;
-    _setRandomMapsClusteredWithoutTarget(data);
+  const [randomMapsClusteredWithoutTargetNotGestalt, _setRandomMapsClusteredWithoutTargetNotGestalt] = useState(RandomClusteredMaps());
+  const randomMapsClusteredWithoutTargetNotGestaltRef = React.useRef(randomMapsClusteredWithoutTargetNotGestalt);
+  const setRandomMapsClusteredWithoutTargetNotGestalt = data => {
+    randomMapsClusteredWithoutTargetNotGestaltRef.current = data;
+    _setRandomMapsClusteredWithoutTargetNotGestalt(data);
   };
 
   const [searchMapURL, _setSearchMapURL] = useState(blankIMG);
@@ -524,9 +535,7 @@ export default function SearchMain() {
       setYesNoDisabled(true);
       setStartDisabled(false);
       setSearchMapURL(blankIMG);
-      setTargetMapURL(notGestaltTarget);
-      setSeries('random-not-gestalt');
-      setRefAndSets();
+      setNextRefAndSets();
       setOpenNext(true);
       return null;
     }
@@ -563,6 +572,51 @@ export default function SearchMain() {
     }
   }
 
+  const setNextRefAndSets = () => {
+    switch (seriesRef.current) {
+      case 'random-gestalt':
+        setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
+        setTargetMapURL(notGestaltTarget);
+        setTargetExtra('-not-gestalt');
+        setSeries('random-not-gestalt');
+        setRefAndSets();
+        return undefined;
+      case 'random-not-gestalt':
+        setMapSets([setRandomMapsClusteredWithTargetGestalt, setRandomMapsClusteredWithoutTargetGestalt]);
+        setMapRefs([randomMapsClusteredWithTargetGestaltRef, randomMapsClusteredWithoutTargetGestaltRef]);
+        setTargetMapURL(gestaltTarget);
+        setTargetExtra('');
+        setSeries('random-clustered-gestalt');
+        setRefAndSets();
+        return undefined;
+      case 'random-clustered-gestalt':
+        setMapSets([setRandomMapsClusteredWithTargetNotGestalt, setRandomMapsClusteredWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsClusteredWithTargetNotGestaltRef, randomMapsClusteredWithoutTargetNotGestaltRef]);
+        setTargetMapURL(notGestaltTarget);
+        setTargetExtra('-not-gestalt');
+        setSeries('random-clustered-not-gestalt');
+        setRefAndSets();
+        return undefined;
+      case 'random-clustered-not-gestalt':
+        setMapSets([setRandomMapsWithTargetGestalt, setRandomMapsWithoutTargetGestalt]);
+        setMapRefs([randomMapsWithTargetGestaltRef, randomMapsWithoutTargetGestaltRef]);
+        setTargetMapURL(gestaltTarget);
+        setTargetExtra('');
+        setSeries('random-gestalt');
+        setRefAndSets();
+        return undefined;
+      default:
+        setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
+        setTargetMapURL(gestaltTarget);
+        setTargetExtra('-not-gestalt');
+        setSeries('random-not-gestalt');
+        setRefAndSets();
+        return undefined;
+    }
+  }
+
   const setRefAndSets = () => {
     switch (seriesRef.current) {
       case 'random-gestalt':
@@ -576,13 +630,13 @@ export default function SearchMain() {
         setTargetExtra('-not-gestalt');
         return undefined;
       case 'random-clustered-gestalt':
-        setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
-        setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
+        setMapSets([setRandomMapsClusteredWithTargetGestalt, setRandomMapsClusteredWithoutTargetGestalt]);
+        setMapRefs([randomMapsClusteredWithTargetGestaltRef, randomMapsClusteredWithoutTargetGestaltRef]);
         setTargetExtra('');
         return undefined;
       case 'random-clustered-not-gestalt':
-        setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
-        setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
+        setMapSets([setRandomMapsClusteredWithTargetNotGestalt, setRandomMapsClusteredWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsClusteredWithTargetNotGestaltRef, randomMapsClusteredWithoutTargetNotGestaltRef]);
         setTargetExtra('-not-gestalt');
         return undefined;
       default:
