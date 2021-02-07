@@ -1,3 +1,10 @@
+// TODO:
+//    * switch clustered
+//    * data recorder
+//    * remove duplicate fuill color images
+//    * get and display stats
+//    * run and fix lint errors
+
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
