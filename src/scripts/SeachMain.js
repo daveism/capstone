@@ -518,7 +518,8 @@ export default function SearchMain() {
       setStartDisabled(false);
       setSearchMapURL(blankIMG);
       setTargetMapURL(notGestaltTarget);
-      setSeries('random-not-gestalt') // kicks of use effect
+      setSeries('random-not-gestalt');
+      setRefAndSets();
       setOpenNext(true);
       return null;
     }
@@ -610,7 +611,7 @@ export default function SearchMain() {
     <div className={classes.nextTargetInfo}>
       <h2 id="simple-modal-title">Directions</h2>
       <p id="simple-modal-description" className={classes.nextTargetDescription}>
-        You are looking for the following object in the map
+        You are looking for the following object in the map, the color of the object will NOT change.
       </p>
       <div className={classes.nextTargetInfoCenter}>
         <img src={targetMapURL} alt="test" className={classes.targetMapImg}/>
