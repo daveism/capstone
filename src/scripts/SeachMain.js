@@ -5,9 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
+import RandomMaps from './RandomMaps';
 
 // css
 import '../css/search.scss';
+
+const RandomMaps = RandomMaps();
 
 // constants for layout
 const defaultSpacing = 16;
@@ -191,11 +194,109 @@ export default function SearchMain() {
   // used to detect the first call - for getting state from url
   const [key, setKey] = useState(true);
   const [timestamp, _setTimestamp] = useState(Date.now());
+
+
+  // const totalRandomLevel = [1,2,3,4,5];
+  // const totalRandomColor = [1,2,3,4];
+  // const totalRandomBasemaps = [1,2,3,4];
+  // const totalRandomTargets = [1,2,3];
+  // const totalRandomTargetstLocation = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+  //
+  // const totalRandomClusteredSize = [1,2,3];
+  // const totalRandomClusteredEdges = [1,2];
+  // const totalRandomClusteredColors = [1,2,3,4];
+  // const totalRandomClusteredBasemaps = [1,2,3,4];
+  // const totalRandomClusteredTargets = [1,2,3];
+  // const totalRandomClusteredTargetLocation = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+  //
+  // // const [usedRandomLevels, setUsedRandomLevels] = useState(totalRandomLevel);
+  // const [usedRandomColors, setUsedRandomColors] = useState(totalRandomColor);
+  // const [usedRandomBasemaps, setUsedRandomBasemaps] = useState(totalRandomBasemaps);
+  // const [usedRandomTargetsG, setUsedRandomTargetsG] = useState(totalRandomTargetsG);
+  // const [usedRandomTargetsNG, setUsedRandomTargetsNG] = useState(totalRandomTargetsNG);
+  //
+  // const [usedRandomClusteredSizes, setUsedRandomClusteredSizes] = useState([]);
+  // const [usedRandomClusteredEdges, setUsedRandomClusteredEdges] = useState([]);
+  // const [usedRandomClusteredColors, setUsedRandomClusteredColors] = useState([]);
+  // const [usedRandomClusteredBasemaps, setUsedRandomClusteredBasemaps] = useState([]);
+  // const [usedRandomClusteredTargetsG, setUsedRandomClusteredTargetsG] = useState(totalRandomClusteredTargetsG);
+  // const [usedRandomClusteredTargetsNG, setUsedRandomClusteredTargetsNG] = useState(totalRandomClusteredTargetsNG);
+
+
   const timestampeRef = React.useRef(timestamp);
   const setTimestamp = data => {
     timestampeRef.current = data;
     _setTimestamp(data);
   };
+
+
+  const baseURL = 'http://capstone-images-daveism.s3-website-us-east-1.amazonaws.com/'
+
+  // generare ranom numbers to pull in map
+  const getRandomNumber = (array) => {
+    const num = Math.floor(Math.random() * array.length);
+    return array[num];
+  };
+
+  const removeRandomNumber = (array, number) => {
+    return array.filter( (value) => (value != number))
+  }
+
+
+  const getTargetRandomName = (target) => {
+    if (target === 0) return 'target-none-';
+    if (target => 1) {
+      const targetNumber = target.toString().length < 2 ? `0 ${target.toString()}` : target.toString();
+      return `target-${targetNumber}-`;
+    }
+  }
+  //
+  // const getBaseMapName = (basemap) => {
+  //   switch (basemap) {
+  //     case 1:
+  //       return 'basemap-none';
+  //     case 2:
+  //       return 'basemap-dark';
+  //     case 3:
+  //       return 'basemap-streets';
+  //     case 4:
+  //       return 'basemap-imagery';
+  //     default:
+  //       return 'basemap-none';
+  //   }
+  // }
+  //
+  // const getRandomLevelName = (distractor) => {
+  //   switch (distractor) {
+  //     case 1:
+  //       return 'random-all-distractor-';
+  //     case 2:
+  //       return 'random-high-distractor-';
+  //     case 3:
+  //       return 'random-med-distractor-';
+  //     case 4:
+  //       return 'random-low-distractor-';
+  //     case 5:
+  //       return 'no-distractor-';
+  //     default:
+  //       return 'random-all-distractor-';
+  //   }
+  // }
+  //
+  // const getRandomLColorName = (color) => {
+  //   switch (color) {
+  //     case 1:
+  //       return 'color-mixed-';
+  //     case 2:
+  //       return 'color-matches_target-';
+  //     case 3:
+  //       return 'color-red-';
+  //     case 4:
+  //       return 'color-blue-';
+  //     default:
+  //       return 'random-all-distractor-';
+  //   }
+  // }
 
   const classes = useStyles();
 
