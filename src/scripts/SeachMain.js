@@ -13,7 +13,7 @@ import RandomClusteredMaps from './RandomClusteredMaps';
 import '../css/search.scss';
 
 //AWS s3 bucket with images
-const baseURL = 'http://capstone-images-daveism.s3-website-us-east-1.amazonaws.com/'
+const baseURL = 'https://capstone-images-daveism.s3.amazonaws.com/'; // 'http://capstone-images-daveism.s3-website-us-east-1.amazonaws.com/'
 const blankIMG = 'src/images/blank.png';
 const gestaltTarget = 'src/images/target-01.png';
 const notGestaltTarget = 'src/images/target-not-gestalt-01.png';
