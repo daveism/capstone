@@ -281,22 +281,43 @@ export default function SearchMain() {
     _setSearchMapURL(data);
   };
 
-  const [targetMap, _setTargetMap] = useState(true);
-  const targetMapRef = React.useRef(targetMap);
-  const setTargetMap = data => {
-    targetMapRef.current = data;
-    _setTargetMap(data);
+  const [targetMapURL, _setTargetMapURL] = useState(gestaltTarget);
+  const targetMapURLRef = React.useRef(targetMapURL);
+  const setTargetMapURL = data => {
+    targetMapURLRef.current = data;
+    _setTargetMapURL(data);
   };
 
-  const randomMapRefs = [
-    randomMapsWithTargetGestaltRef,
-    randomMapsWithoutTargetGestaltRef,
-  ];
+  // random-gestalt, random-not-gestalt, random-clustered-gestalt, random-clustered--not-gestalt
+  const [series, _setSeries] = useState('random-gestalt');
+  const seriesRef = React.useRef(series);
+  const setSeries = data => {
+    seriesRef.current = data;
+    _setSeries(data);
+  };
 
-  const randomMapSets = [
-    setRandomMapsWithTargetGestalt,
-    setRandomMapsWithoutTargetGestalt,
-  ];
+
+  // blank string or -not-gestalt
+  const [targetExtra, _setTargetExtra] = useState('');
+  const targetExtraRef = React.useRef(targetExtra);
+  const setTargetExtra = data => {
+    targetExtraRef.current = data;
+    _setTargetExtra(data);
+  };
+
+  const [mapRefs, _setMapRefs] = useState([randomMapsWithTargetGestaltRef, randomMapsWithoutTargetGestaltRef]);
+  const mapRefsRef = React.useRef(mapRefs);
+  const setMapRefs = data => {
+    mapRefsRef.current = data;
+    _setMapRefs(data);
+  };
+
+  const [mapSets, _setMapSets] = useState( [setRandomMapsWithTargetGestalt, setRandomMapsWithoutTargetGestalt]);
+  const mapSetsRef = React.useRef(mapSets);
+  const setMapSets = data => {
+    mapSetsRef.current = data;
+    _setMapSets(data);
+  };
 
   // generate ranom numbers to pull in map
   const getRandomMap = (mapArray) => {
@@ -313,7 +334,7 @@ export default function SearchMain() {
     if (target === 0) return 'target-none-';
     if (target => 1) {
       const targetNumber = target.toString().length < 2 ? `0${target.toString()}` : target.toString();
-      return `target-${targetNumber}-`;
+      return `target${targetExtraRef.current}-${targetNumber}-`;
     }
   }
 
@@ -352,15 +373,17 @@ export default function SearchMain() {
   const getNextMap = () => {
     const targetYesNo = getRandomMap([0,1]);
     const useWith = targetYesNo ? 'with' : 'without' ;
-    const ref = randomMapRefs[targetYesNo];
-    const set =  randomMapSets[targetYesNo];
-    const otherRef = randomMapRefs[targetYesNo ? 0 : 1];
+    const ref = mapRefs[targetYesNo];
+    const set =  mapSets[targetYesNo];
+    const otherRef = mapRefs[targetYesNo ? 0 : 1];
 
     if (ref.current.length === 0 && otherRef.current.length === 0) {
       window.removeEventListener('keydown', handleYNkeyPress);
       setYesNoDisabled(true);
       setStartDisabled(false);
       setSearchMapURL(blankIMG);
+      setTargetMapURL(notGestaltTarget);
+      setSeries('random-not-gestalt') // kicks of use effect
       return null;
     }
 
@@ -368,7 +391,6 @@ export default function SearchMain() {
     if (ref.current.length === 0) getNextMap();
     return null;
   }
-
 
   const classes = useStyles();
 
@@ -397,10 +419,41 @@ export default function SearchMain() {
     }
   }
 
+  const setRefAndSets = () => {
+    switch (seriesRef.current) {
+      case 'random-gestalt':
+        setMapSets([setRandomMapsWithTargetGestalt, setRandomMapsWithoutTargetGestalt]);
+        setMapRefs([randomMapsWithTargetGestaltRef, randomMapsWithoutTargetGestaltRef]);
+        setTargetExtra('');
+        return undefined;
+      case 'random-not-gestalt':
+        setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
+        setTargetExtra('-not-gestalt');
+        return undefined;
+      case 'random-clustered-gestalt':
+        setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
+        setTargetExtra('');
+        return undefined;
+      case 'random-clustered--not-gestalt':
+        setMapSets([setRandomMapsWithTargetNotGestalt, setRandomMapsWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsWithTargetNotGestaltRef, randomMapsWithoutTargetNotGestaltRef]);
+        setTargetExtra('-not-gestalt');
+        return undefined;
+      default:
+        setMapSets([setRandomMapsWithTargetGestalt, setRandomMapsWithoutTargetGestalt]);
+        setMapRefs([randomMapsWithTargetGestaltRef, randomMapsWithoutTargetGestaltRef]);
+        setTargetExtra('');
+        return undefined;
+    }
+  }
+
   // when subject clicks the start button
   const handleStart = (event) => {
     setYesNoDisabled(false);
     setStartDisabled(true);
+    setRefAndSets();
     window.addEventListener('keydown', handleYNkeyPress);
     setTimestamp( Date.now());
     getNextMap();
@@ -436,7 +489,7 @@ export default function SearchMain() {
               </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.targetMapGrid}>
                 <Box display='flex' flexDirection='row' flex={1} justifyContent='center' alignItems="center" className={classes.targetMapHolder}>
-                  <img src="src/images/target-01.png" alt="test" className={classes.targetMapImg}/>
+                  <img src={targetMapURL} alt="test" className={classes.targetMapImg}/>
                 </Box>
               </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.statTitle}>
