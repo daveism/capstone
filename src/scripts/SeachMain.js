@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       maxWidth: '360px',
       maxHeight: '800px',
+      padding: theme.spacing(0),
     }
   },
   mainTitle: {
@@ -60,7 +61,11 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
-      display: 'none'
+      display: window.screen.height < 700 ? 'none' : 'inline',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: theme.spacing(1),
+      width: '320px',
     }
   },
   buttonsYesNo: {
@@ -68,6 +73,9 @@ const useStyles = makeStyles((theme) => ({
     height: `${buttonHeight}px`,
     fontSize: '1.5rem',
     fontWeight: 'bold',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.85rem',
+    }
   },
   searchMapsArea: {
     margin: theme.spacing(0),
@@ -88,11 +96,15 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     [theme.breakpoints.down('sm')]: {
       height: 'unset',
-      order: 5
+      order: 5,
+      padding: theme.spacing(.5),
     }
   },
   searchMapGrid: {
     display: 'flex',
+    [theme.breakpoints.down('sm')]: {
+      paddingLeft: theme.spacing(2),
+    }
   },
   searchMapHolder: {
     height: '500px',
@@ -100,20 +112,19 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0),
     marginRight: theme.spacing(0),
     [theme.breakpoints.down('sm')]: {
-      height: '265px',
-      width: '336px'
+      height: '198px',
+      width: '253px',
     }
   },
   targetMapHolder: {
     backgroundColor: offWhite,
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    borderRadius: '4px',
     height: '220px',
+    marginLeft: theme.spacing(0),
+    marginRight: theme.spacing(0),
     [theme.breakpoints.down('sm')]: {
-      marginLeft: theme.spacing(0),
-      marginRight: theme.spacing(0),
-      height: '168px',
+      height: '135px',
+      width: '253px',
+      maxWidth: '253px',
     }
   },
   statGridLeft: {
@@ -148,13 +159,17 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       order: 3,
       paddingLeft: theme.spacing(2),
-      height: '45px',
+      height: '40px',
     }
   },
   targetMapGrid: {
+    display: 'flex',
     [theme.breakpoints.down('sm')]: {
       order: 4,
       paddingLeft: theme.spacing(2),
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     }
   },
   searchMapsTitle: {
@@ -183,8 +198,8 @@ const useStyles = makeStyles((theme) => ({
     width: '280px',
     height: '220px',
     [theme.breakpoints.down('sm')]: {
-      height: '158px',
-      width: '200px',
+      height: '125px',
+      width: '158px',
     }
   },
   searchMapImg: {
@@ -192,9 +207,8 @@ const useStyles = makeStyles((theme) => ({
     height: '500px',
     width: '633px',
     [theme.breakpoints.down('sm')]: {
-      height: '266px',
-      width: '336px',
-      paddingLeft: theme.spacing(4),
+      height: '198px',
+      width: '253px',
     }
   },
   StartGrid: {
@@ -244,12 +258,16 @@ const useStyles = makeStyles((theme) => ({
   },
   nextTargetDescription: {
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '.75em',
+    }
   },
   nextTargetDescriptionMobile: {
     marginBottom: theme.spacing(2),
     display: 'none',
     [theme.breakpoints.down('sm')]: {
       display: 'block',
+      fontSize: '.75rem'
     }
   },
   aggreementModal: {
@@ -276,7 +294,7 @@ const useStyles = makeStyles((theme) => ({
   AggreementInfoDecription: {
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
-      fontSize: '.85em',
+      fontSize: '.75em',
       marginBottom: theme.spacing(.5),
     }
   },
@@ -285,7 +303,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     fontStyle: 'italic',
     [theme.breakpoints.down('sm')]: {
-      fontSize: '.65rem',
+      fontSize: '.60rem',
     }
   },
   AggreementCenter: {
