@@ -209,7 +209,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       height: '198px',
       width: '253px',
-      boder: `1px solid ${offWhite}`
+      border: `2px solid ${offWhite}`
     }
   },
   StartGrid: {
