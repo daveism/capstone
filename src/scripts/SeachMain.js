@@ -53,18 +53,20 @@ const useStyles = makeStyles((theme) => ({
     height: `${titleHeight}px`,
   },
   buttonsDirecton: {
-    width: '296px',
+    width: '328px',
     height: `${buttonHeight}px`,
     fontSize: '1.5rem',
     fontWeight: 'normal',
     marginTop: theme.spacing(0),
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(0),
+    marginRight: theme.spacing(0),
     [theme.breakpoints.down('sm')]: {
       display: window.screen.height < 700 ? 'none' : 'inline',
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: theme.spacing(1),
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2),
       width: '320px',
     }
   },
@@ -118,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
   },
   targetMapHolder: {
     backgroundColor: offWhite,
-    height: '220px',
+    height: '200px',
     marginLeft: theme.spacing(0),
     marginRight: theme.spacing(0),
     [theme.breakpoints.down('sm')]: {
@@ -195,8 +197,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   targetMapImg: {
-    width: '280px',
-    height: '220px',
+    width: '235px',
+    height: '185px',
     [theme.breakpoints.down('sm')]: {
       height: '125px',
       width: '158px',
