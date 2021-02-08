@@ -258,8 +258,13 @@ const useStyles = makeStyles((theme) => ({
   },
   nextTargetInfoCenter: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    alignItems: 'start',
+    justifyContent: 'start'
+  },
+  nextTargetInfoEnd: {
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end'
   },
   nextTargetDescription: {
     marginBottom: theme.spacing(2),
@@ -736,7 +741,7 @@ export default function SearchMain() {
       <p id='simple-modal-description' className={classes.nextTargetDescription}>
         To begin the close this box and then click  <strong>Start Experiment</strong>.
       </p>
-      <div className={classes.nextTargetInfoCenter}>
+      <div className={classes.nextTargetInfoEnd}>
         <Button onClick={handleCloseNext} color='primary' variant='contained' >Close</Button>
       </div>
     </div>
