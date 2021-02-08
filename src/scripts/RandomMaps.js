@@ -51,7 +51,6 @@ const RandomMaps = () => ([
   'distractor-random-high-distractor-color-blue-basemap-imagery',
   'distractor-random-med-distractor-color-blue-basemap-imagery',
   'distractor-random-low-distractor-color-blue-basemap-imagery',
-  'no-distractor-basemap-none',
   'no-distractor-basemap-streets',
   'no-distractor-basemap-dark',
   'no-distractor-basemap-imagery'

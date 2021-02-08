@@ -2,6 +2,7 @@
 //    * data recorder
 //    * remove duplicate fuill color images
 //    * get and display stats
+//    * add attribute data for baesmaps
 
 // mui and react
 import React, { useEffect, useState } from 'react';
