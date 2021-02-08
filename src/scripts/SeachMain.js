@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     height: `${titleHeight}px`
   },
   buttonsDirecton: {
+    textTransform: 'none',
     width: '328px',
     height: `${buttonHeight}px`,
     fontSize: '1.5rem',
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   buttonsYesNo: {
+    textTransform: 'none',
     width: '100%',
     height: `${buttonHeight}px`,
     fontSize: '1.5rem',
@@ -116,6 +118,7 @@ const useStyles = makeStyles((theme) => ({
   },
   targetMapHolder: {
     backgroundColor: offWhite,
+    borderRadius: '4px',
     height: '200px',
     marginLeft: theme.spacing(0),
     marginRight: theme.spacing(0),
@@ -144,6 +147,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   statTitle: {
+    marginLeft:  theme.spacing(2),
     height: '75px',
     display: 'flex',
     alignItems: 'flex-end',
@@ -171,6 +175,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   searchMapsTitle: {
+    marginLeft: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
       paddingLeft: theme.spacing(2),
       height: '45px'
@@ -204,10 +209,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     height: '500px',
     width: '633px',
+    border: `2px solid ${offWhite}`,
+    borderRadius: '4px',
     [theme.breakpoints.down('sm')]: {
       height: '198px',
-      width: '253px',
-      border: `2px solid ${offWhite}`
+      width: '253px'
     }
   },
   StartGrid: {
@@ -246,8 +252,8 @@ const useStyles = makeStyles((theme) => ({
       width: '80%'
     },
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
+    border: '0px solid transparent',
+    borderRadius: '4px',
     padding: theme.spacing(2, 4, 3)
   },
   nextTargetInfoCenter: {
@@ -280,8 +286,8 @@ const useStyles = makeStyles((theme) => ({
       width: '80%'
     },
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
+    border: '0px solid transparent',
+    borderRadius: '4px',
     padding: theme.spacing(2, 4, 3)
   },
   AggreementInfoTitle: {
