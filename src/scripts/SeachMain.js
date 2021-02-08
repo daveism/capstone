@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 
 import RandomMaps from './RandomMaps';
+import RandomMapsNotGestalt from './RandomMapsNotGestalt';
 import RandomClusteredMaps from './RandomClusteredMaps';
 // css
 import '../css/search.scss';
@@ -381,7 +382,7 @@ export default function SearchMain() {
 
   // random noise background and target is not as gestalt
   const [randomMapsWithTargetNotGestalt,
-    _setRandomMapsWithTargetNotGestalt] = useState(RandomMaps());
+    _setRandomMapsWithTargetNotGestalt] = useState(RandomMapsNotGestalt());
   const randomMapsWithTargetNotGestaltRef = React.useRef(randomMapsWithTargetNotGestalt);
   const setRandomMapsWithTargetNotGestalt = (data) => {
     randomMapsWithTargetNotGestaltRef.current = data;
@@ -390,7 +391,7 @@ export default function SearchMain() {
 
   // random noise background and target is not as gestalt missng
   const [randomMapsWithoutTargetNotGestalt,
-    _setRandomMapsWithoutTargetNotGestalt] = useState(RandomMaps());
+    _setRandomMapsWithoutTargetNotGestalt] = useState(RandomMapsNotGestalt());
   const randomMapsWithoutTargetNotGestaltRef =
     React.useRef(randomMapsWithoutTargetNotGestalt);
   const setRandomMapsWithoutTargetNotGestalt = (data) => {
