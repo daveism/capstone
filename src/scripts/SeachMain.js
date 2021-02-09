@@ -1,7 +1,5 @@
 // TODO:
 //    * data recorder
-//    * random order for maps
-//    * get and display stats
 //    * add attribute data for baesmaps
 
 // mui and react
