@@ -133,24 +133,27 @@ const useStyles = makeStyles((theme) => ({
   },
   statGridLeft: {
     paddingLeft: theme.spacing(2),
+    paddingTop: theme.spacing(1),
     height: '145px',
     [theme.breakpoints.down('sm')]: {
+      paddingTop: theme.spacing(0),
       order: 2,
       height: '121px',
       display: window.screen.height < 700 ? 'none' : 'flex'
     }
   },
   statGridRight: {
-    paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
     height: '145px',
     [theme.breakpoints.down('sm')]: {
+      paddingTop: theme.spacing(0),
       order: 2,
       height: '121px',
       display: window.screen.height < 700 ? 'none' : 'flex'
     }
   },
   statTitle: {
-    marginLeft:  theme.spacing(2),
+    marginLeft: theme.spacing(2),
     height: '35px',
     display: 'flex',
     alignItems: 'center',
@@ -160,7 +163,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   statProgressOverall: {
-    marginLeft:  theme.spacing(2),
+    marginLeft: theme.spacing(2),
     height: '35px',
     display: 'flex',
     alignItems: 'center',
@@ -168,6 +171,23 @@ const useStyles = makeStyles((theme) => ({
       order: 1,
       display: 'none'
     }
+  },
+  statProgressTrial: {
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
+  },
+  statProgressTrialBar: {
+    width: '100%',
+    height: theme.spacing(1),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   targetTitle: {
     height: '60px',
@@ -178,6 +198,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   targetMapGrid: {
+    paddingTop: theme.spacing(1),
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
       order: 4,
@@ -188,7 +209,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   searchMapsTitle: {
-    marginLeft: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
       paddingLeft: theme.spacing(2),
       height: '45px'
@@ -246,6 +266,8 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   h3: {
+    display: 'flex',
+    justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
       marginTop: theme.spacing(1.5),
       marginBottom: theme.spacing(1)
@@ -361,7 +383,10 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '2.75em',
     marginTop: theme.spacing(0),
     marginBottom: theme.spacing(0),
-    color: '#000000'
+    color: '#000000',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '2.25em'
+    }
   },
   StatDataDescription: {
     width: '100%',
@@ -382,6 +407,7 @@ const experimentTypes = ['random-gestalt', 'random-not-gestalt', 'random-cluster
 export default function SearchMain() {
   const [progressTrial, setProgressTrial] = React.useState(0);
   const [progressOverall, setProgressOverall] = React.useState(0);
+  const [trialCount, setTrialCount] = React.useState(0);
 
   const [times, _setTimes] = React.useState([]);
   const timesRef = React.useRef(times);
@@ -663,6 +689,7 @@ export default function SearchMain() {
           randomMapsWithoutTargetGestaltRef]);
         setTargetExtra('');
         setTargetMapURL(gestaltTarget);
+        setTrialCount(randomMapsWithTargetGestaltRef.current.length + randomMapsWithoutTargetGestaltRef.current.length);
         return undefined;
       case 'random-not-gestalt':
         setMapSets([setRandomMapsWithTargetNotGestalt,
@@ -671,6 +698,7 @@ export default function SearchMain() {
           randomMapsWithoutTargetNotGestaltRef]);
         setTargetExtra('-not-gestalt');
         setTargetMapURL(notGestaltTarget);
+        setTrialCount(randomMapsWithTargetNotGestaltRef.current.length + randomMapsWithoutTargetNotGestaltRef.current.length);
         return undefined;
       case 'random-clustered-gestalt':
         setMapSets([setRandomMapsClusteredWithTargetGestalt,
@@ -679,6 +707,7 @@ export default function SearchMain() {
           randomMapsClusteredWithoutTargetGestaltRef]);
         setTargetExtra('');
         setTargetMapURL(gestaltTarget);
+        setTrialCount(randomMapsClusteredWithTargetGestaltRef.current.length + randomMapsClusteredWithoutTargetGestaltRef.current.length);
         return undefined;
       case 'random-clustered-not-gestalt':
         setMapSets([setRandomMapsClusteredWithTargetNotGestalt,
@@ -687,6 +716,7 @@ export default function SearchMain() {
           randomMapsClusteredWithoutTargetNotGestaltRef]);
         setTargetExtra('-not-gestalt');
         setTargetMapURL(notGestaltTarget);
+        setTrialCount(randomMapsClusteredWithTargetNotGestaltRef.current.length + randomMapsClusteredWithoutTargetNotGestaltRef.current.length);
         return undefined;
       default:
         setMapSets([setRandomMapsWithTargetGestalt,
@@ -695,6 +725,7 @@ export default function SearchMain() {
           randomMapsWithoutTargetGestaltRef]);
         setTargetExtra('');
         setTargetMapURL(gestaltTarget);
+        setTrialCount(randomMapsWithTargetGestaltRef.current.length + randomMapsWithoutTargetGestaltRef.current.length);
         return undefined;
     }
   };
@@ -712,6 +743,11 @@ export default function SearchMain() {
     const set = mapSetsRef.current[targetYesNo];
     const otherRef = mapRefsRef.current[targetYesNo ? 0 : 1];
 
+
+    const currentTrialCount = ref.current.length + otherRef.current.length;
+    const percentComplete =  ((trialCount - currentTrialCount) / currentTrialCount) * 100;
+    setProgressTrial(percentComplete)
+;
     setCurrentTarget(targetYesNo);
 
     if (ref.current.length === 0 && otherRef.current.length === 0) {
@@ -869,7 +905,7 @@ export default function SearchMain() {
           <Grid item xs={12} md={4} m={2}display='flex' flex={1}>
 
             <Grid container spacing={0} className={classes.sideMapsHolder}>
-              <Grid onClick={handleOpenNext} item xs={12} display='flex' flex={1} className={classes.targetTitle}>
+              <Grid onClick={handleOpenNext} item xs={12} display='flex' justifyContent='center' flex={1} className={classes.targetTitle}>
                 <h3 className={classes.h3}>Look for this object</h3>
               </Grid>
               <Grid onClick={handleOpenNext} item xs={12} display='flex' flex={1} className={classes.targetMapGrid}>
@@ -879,7 +915,7 @@ export default function SearchMain() {
               </Grid>
               <Button onClick={handleOpenNext} variant='outlined' color='default' className={classes.buttonsDirecton} height='100%'>Directions</Button>
                 <Grid item xs={12} display='flex' flex={1} className={classes.statTitle}>
-                  Progress overall
+                   {progressOverall}% complete
                 </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.statProgressOverall}>
                 <LinearProgress color='primary' variant="determinate" value={progressOverall} className={classes.statProgress}/>
@@ -916,8 +952,11 @@ export default function SearchMain() {
 
           <Grid item xs={12} md={8} display='flex' flex={1} className={classes.searchMapsGrid}>
             <Grid container spacing={0} display='flex'>
-              <Grid item xs={12} display='flex' flex={1} className={classes.searchMapsTitle}>
+              <Grid item xs={12} display='flex' justifyContent='flex-start' alignItems='center' flex={1} className={classes.searchMapsTitle}>
                 <h3 className={classes.h3}>On this map</h3>
+                <span className={classes.statProgressTrial}>
+                  <LinearProgress color='primary' variant="determinate" value={progressTrial} className={classes.statProgressTrialBar}/>
+                </span>
               </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.searchMapGrid}>
                 <Box display='flex' flexDirection='row' flex={1} justifyContent='center' alignItems='center' className={classes.searchMapHolder} >
