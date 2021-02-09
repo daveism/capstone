@@ -12,8 +12,8 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-import CircularProgressWithLabel from './CircularProgressWithLabel';
 import RandomMaps from './RandomMaps';
 import RandomMapsNoTarget from './RandomMapsNoTarget';
 import RandomClusteredMaps from './RandomClusteredMaps';
@@ -151,9 +151,19 @@ const useStyles = makeStyles((theme) => ({
   },
   statTitle: {
     marginLeft:  theme.spacing(2),
-    height: '75px',
+    height: '35px',
     display: 'flex',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      order: 1,
+      display: 'none'
+    }
+  },
+  statProgressOverall: {
+    marginLeft:  theme.spacing(2),
+    height: '35px',
+    display: 'flex',
+    alignItems: 'center',
     [theme.breakpoints.down('sm')]: {
       order: 1,
       display: 'none'
@@ -341,13 +351,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     fontSize: '1.1em',
-    color: '#888888'
+    color: '#888888',
+    marginTop: theme.spacing(0)
   },
   StatData: {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    fontSize: '2.5em',
+    fontSize: '2.75em',
     marginTop: theme.spacing(0),
     marginBottom: theme.spacing(0),
     color: '#000000'
@@ -360,13 +371,17 @@ const useStyles = makeStyles((theme) => ({
     color: '#888888',
     marginTop: theme.spacing(0),
     marginBottom: theme.spacing(0)
+  },
+  statProgress: {
+    width: '100%'
   }
 }));
 
 const experimentTypes = ['random-gestalt', 'random-not-gestalt', 'random-clustered-gestalt', 'random-clustered-not-gestalt'];
 
 export default function SearchMain() {
-  const [progress, setProgress] = React.useState(0);
+  const [progressTrial, setProgressTrial] = React.useState(0);
+  const [progressOverall, setProgressOverall] = React.useState(0);
 
   const [times, _setTimes] = React.useState([]);
   const timesRef = React.useRef(times);
@@ -637,7 +652,8 @@ export default function SearchMain() {
 
     const experiment = getRandomMap(allExperimentsRef.current);
     const percentComplete =  ((experimentTypes.length - allExperimentsRef.current.length) / experimentTypes.length) * 100;
-    setProgress(percentComplete)
+    setProgressOverall(percentComplete)
+
     setAllExperiments(removeRandomNumber(allExperimentsRef.current, experiment));
     switch (experiment) {
       case 'random-gestalt':
@@ -861,12 +877,15 @@ export default function SearchMain() {
                   <img src={targetMapURL} alt='test' className={classes.targetMapImg}/>
                 </Box>
               </Grid>
-              <Button onClick={handleOpenNext} variant='contained' color='default' className={classes.buttonsDirecton} height='100%'>Directions</Button>
-              <Grid item xs={12} display='flex' flex={1} className={classes.statTitle}>
-                <h3 className={classes.h3}>Your stats</h3>
+              <Button onClick={handleOpenNext} variant='outlined' color='default' className={classes.buttonsDirecton} height='100%'>Directions</Button>
+                <Grid item xs={12} display='flex' flex={1} className={classes.statTitle}>
+                  Progress overall
+                </Grid>
+              <Grid item xs={12} display='flex' flex={1} className={classes.statProgressOverall}>
+                <LinearProgress color='primary' variant="determinate" value={progressOverall} className={classes.statProgress}/>
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridLeft}>
-                <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxLeft}>
+                <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.300' className={classes.statBoxLeft}>
                   <h3 className={classes.StatDataTitle}>
                      Avg Correct
                    </h3>
@@ -879,7 +898,7 @@ export default function SearchMain() {
                </Box>
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridRight}>
-                <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxRight}>
+                <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.300' className={classes.statBoxRight}>
                   <h3 className={classes.StatDataTitle}>
                      Avg Time
                    </h3>
