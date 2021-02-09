@@ -12,7 +12,9 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
+import Typography from '@material-ui/core/Typography';
 
+import CircularProgressWithLabel from './CircularProgressWithLabel';
 import RandomMaps from './RandomMaps';
 import RandomMapsNoTarget from './RandomMapsNoTarget';
 import RandomClusteredMaps from './RandomClusteredMaps';
@@ -282,12 +284,12 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '.75rem'
     }
   },
-  aggreementModal: {
+  agreementModal: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
   },
-  AggreementInfo: {
+  agreementInfo: {
     width: '50%',
     [theme.breakpoints.down('sm')]: {
       width: '80%'
@@ -297,20 +299,20 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     padding: theme.spacing(2, 4, 3)
   },
-  AggreementInfoTitle: {
+  agreementInfoTitle: {
     [theme.breakpoints.down('sm')]: {
       fontSize: '1.2em',
       marginBottom: theme.spacing(0.5)
     }
   },
-  AggreementInfoDecription: {
+  agreementInfoDecription: {
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
       fontSize: '.75em',
       marginBottom: theme.spacing(0.5)
     }
   },
-  AggreementInfoContact: {
+  agreementInfoContact: {
     fontSize: '.85rem',
     marginBottom: theme.spacing(3),
     fontStyle: 'italic',
@@ -318,7 +320,7 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '.60rem'
     }
   },
-  AggreementCenter: {
+  agreementCenter: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -327,17 +329,80 @@ const useStyles = makeStyles((theme) => ({
     }
 
   },
-  aggreeButton: {
+  agreeButton: {
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.down('sm')]: {
       marginTop: theme.spacing(1),
       width: '100%'
     }
+  },
+  StatTitle: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    fontSize: '.9em',
+    color: '#888888'
+  },
+  StatData: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    fontSize: '2.5em',
+    marginTop: theme.spacing(0),
+    marginBottom: theme.spacing(0),
+    color: '#000000'
+  },
+  StatDataDescription: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    fontSize: '1em',
+    color: '#888888',
+    marginTop: theme.spacing(0),
+    marginBottom: theme.spacing(0)
   }
 }));
 
+const experimentTypes = ['random-gestalt', 'random-not-gestalt', 'random-clustered-gestalt', 'random-clustered-not-gestalt'];
+
 export default function SearchMain() {
+  const [progress, setProgress] = React.useState(0);
+
+  const [times, _setTimes] = React.useState([]);
+  const timesRef = React.useRef(times);
+  const setTimes = (data) => {
+    timesRef.current = data;
+    _setTimes(data);
+  };
+
+  const [currentTarget, _setCurrentTarget] = React.useState(0);
+  const currentTargetRef = React.useRef(currentTarget);
+  const setCurrentTarget = (data) => {
+    currentTargetRef.current = data;
+    _setCurrentTarget(data);
+  };
+
+  const [answers, _setAnswers] = React.useState([]);
+  const answersRef = React.useRef(answers);
+  const setAnswers = (data) => {
+    answersRef.current = data;
+    _setAnswers(data);
+  };
+
+  const [avgCorrect, _setAvgCorrect] = React.useState([0]);
+  const avgCorrectRef = React.useRef(avgCorrect);
+  const setAvgCorrect = (data) => {
+    avgCorrectRef.current = data;
+    _setAvgCorrect(data);
+  };
+
+  const [avgTime, _setAvgTime] = React.useState([0]);
+  const avgTimeRef = React.useRef(avgTime);
+  const setAvgTime = (data) => {
+    avgTimeRef.current = data;
+    _setAvgTime(data);
+  };
   // set React state via React Hooks
   // used to detect the first call - for getting state from url
   // most of these need a ref so we can use window key press
@@ -356,7 +421,7 @@ export default function SearchMain() {
     _setYesNoDisabled(data);
   };
 
-  const [allExperiments, _setAllExperiments] = useState( ['random-gestalt', 'random-not-gestalt', 'random-clustered-gestalt', 'random-clustered-not-gestalt']);
+  const [allExperiments, _setAllExperiments] = useState(experimentTypes);
   const allExperimentsRef = React.useRef(allExperiments);
   const setAllExperiments = (data) => {
     allExperimentsRef.current = data;
@@ -501,17 +566,17 @@ export default function SearchMain() {
     setOpenNext(false);
   };
 
-  const [openAggreement, setOpenAggreement] = React.useState(true);
+  const [openagreement, setOpenagreement] = React.useState(true);
 
-  const handleDisaggree = () => {
+  const handleDisagree = () => {
     setYesNoDisabled(true);
     setStartDisabled(true);
-    setOpenAggreement(false);
+    setOpenagreement(false);
   };
 
-  const handleAggree = () => {
+  const handleagree = () => {
     setStartDisabled(false);
-    setOpenAggreement(false);
+    setOpenagreement(false);
     setRefAndSets();
     setOpenNext(true);
   };
@@ -572,6 +637,8 @@ export default function SearchMain() {
     }
 
     const experiment = getRandomMap(allExperimentsRef.current);
+    const percentComplete =  ((experimentTypes.length - allExperimentsRef.current.length) / experimentTypes.length) * 100;
+    setProgress(percentComplete)
     setAllExperiments(removeRandomNumber(allExperimentsRef.current, experiment));
     switch (experiment) {
       case 'random-gestalt':
@@ -630,6 +697,8 @@ export default function SearchMain() {
     const set = mapSetsRef.current[targetYesNo];
     const otherRef = mapRefsRef.current[targetYesNo ? 0 : 1];
 
+    setCurrentTarget(targetYesNo);
+
     if (ref.current.length === 0 && otherRef.current.length === 0) {
       window.removeEventListener('keydown', handleYNkeyPress); // eslint-disable-line no-use-before-define
       setYesNoDisabled(true);
@@ -645,11 +714,28 @@ export default function SearchMain() {
     return null;
   };
 
+  const calcAvgTime = (timeEllapsed) => {
+    setTimes([...timesRef.current, timeEllapsed]);
+    const tempAvg = Math.round( (timesRef.current.reduce( ( p, c ) => p + c, 0 ) / timesRef.current.length) * 100) / 100;
+    const averageTime = tempAvg > 0 ? tempAvg : 0;
+    setAvgTime(averageTime);
+  }
+
+  const calcAvgCorrect = (theAnswer) => {
+    const value = theAnswer === 'Y' ? 1 : 0;
+    currentTargetRef.current === value ? setAnswers([...answersRef.current, 1]) : setAnswers([...answersRef.current, 0]);
+    const tempAvg = Math.round( (answersRef.current.reduce( ( p, c ) => p + c, 0 ) / answersRef.current.length) * 100) / 100;
+    const averageCorrect = tempAvg > 0 ? tempAvg : 0;
+    setAvgCorrect(averageCorrect * 100);
+  }
+
   const howAnswered = (keypressed) => {
     if (yesNoDisabledRef.current) return null;
     switch (keypressed) {
       case 'Y': {
         const yesTime = timeEllapsed();
+        calcAvgTime(yesTime);
+        calcAvgCorrect(keypressed);
         setTimestamp(Date.now());
         console.log(`you answered yes in ${yesTime} ms`);
         getNextMap();
@@ -658,6 +744,8 @@ export default function SearchMain() {
       case 'N': {
         const noTime = timeEllapsed();
         setTimestamp(Date.now());
+        calcAvgCorrect(keypressed);
+        calcAvgTime(noTime);
         console.log(`you answered no in ${noTime} ms`);
         getNextMap();
         return keypressed;
@@ -719,10 +807,10 @@ export default function SearchMain() {
     </div>
   );
 
-  const bodyAggreement = (
-    <div className={classes.AggreementInfo}>
-      <h2 id='simple-modal-title' className={classes.AggreementInfoTitle}>Study Participation Aggreement</h2>
-      <p id='simple-modal-description' className={classes.AggreementInfoDecription}>
+  const bodyagreement = (
+    <div className={classes.agreementInfo}>
+      <h2 id='simple-modal-title' className={classes.agreementInfoTitle}>Study Participation agreement</h2>
+      <p id='simple-modal-description' className={classes.agreementInfoDecription}>
         Thank you for taking part in this study. By using the following website,
         you are agreeing to participate in
         a study about how people use web-presented maps. We will collect information about your
@@ -734,12 +822,12 @@ export default function SearchMain() {
         in this research
         study and you will not be compensated. There are no known risks in the following tasks.
       </p>
-      <p id='simple-modal-description' className={classes.AggreementInfoDecription}>
+      <p id='simple-modal-description' className={classes.agreementInfoDecription}>
         By agreeing to this, you have acknowledged that you have read the contents of
         this consent, are an
         adult over 18 years of age, and you are giving consent to participate in this study
       </p>
-      <p id='simple-modal-contact' className={classes.AggreementInfoContact}>
+      <p id='simple-modal-contact' className={classes.agreementInfoContact}>
         The researchers conducting this study are Michael Neelon, PhD and
         David Michelson. For questions or more information concerning this
         research you may contact Dr. Neelon at 828-250-2359 or mneelon@unca.edu,
@@ -747,9 +835,9 @@ export default function SearchMain() {
         rights as a research subject, you may contact the UNC Asheville Institutional
         Review Board at 828.251.6313 or irb@unca.edu.
       </p>
-      <div className={classes.AggreementCenter}>
-        <Button onClick={handleAggree} className={classes.aggreeButton} color='primary' variant='contained' >I aggree</Button>
-        <Button onClick={handleDisaggree} className={classes.aggreeButton} color='default' variant='contained' >I do not aggree</Button>
+      <div className={classes.agreementCenter}>
+        <Button onClick={handleagree} className={classes.agreeButton} color='primary' variant='contained' >I agree</Button>
+        <Button onClick={handleDisagree} className={classes.agreeButton} color='default' variant='contained' >I do not agree</Button>
       </div>
     </div>
   );
@@ -778,11 +866,29 @@ export default function SearchMain() {
                 <h3 className={classes.h3}>Your stats</h3>
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridLeft}>
-                <Box display='flex' flexDirection='row' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxLeft}>
-                </Box>
+                <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxLeft}>
+                  <h3 className={classes.StatTitle}>
+                     Avg Correct
+                   </h3>
+                   <p className={classes.StatData}>
+                      {avgCorrect}%
+                  </p>
+                  <p className={classes.StatDataDescription}>
+                     &nbsp;
+                 </p>
+               </Box>
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridRight}>
-                <Box display='flex' flexDirection='row' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxRight}>
+                <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxRight}>
+                  <h3 className={classes.StatTitle}>
+                     Avg Time
+                   </h3>
+                   <p className={classes.StatData}>
+                      {avgTime}
+                  </p>
+                  <p className={classes.StatDataDescription}>
+                     ms
+                 </p>
                 </Box>
               </Grid>
             </Grid>
@@ -829,8 +935,8 @@ export default function SearchMain() {
       <Modal open={openNext} onClose={handleCloseNext} className={classes.nextTargetModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
         {bodyNext}
       </Modal>
-      <Modal open={openAggreement} onClose={handleDisaggree} className={classes.aggreementModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
-        {bodyAggreement}
+      <Modal open={openagreement} onClose={handleDisagree} className={classes.agreementModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
+        {bodyagreement}
       </Modal>
     </div>
   );
