@@ -2,7 +2,7 @@
 //    * data recorder
 //    * add attribute data for baesmaps
 //    * add percent percentComplete
-// 
+//
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -336,11 +336,11 @@ const useStyles = makeStyles((theme) => ({
       width: '100%'
     }
   },
-  StatTitle: {
+  StatDataTitle: {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    fontSize: '.9em',
+    fontSize: '1.1em',
     color: '#888888'
   },
   StatData: {
@@ -715,17 +715,18 @@ export default function SearchMain() {
 
   const calcAvgTime = (timeEllapsed) => {
     setTimes([...timesRef.current, timeEllapsed]);
-    const tempAvg = Math.round( (timesRef.current.reduce( ( p, c ) => p + c, 0 ) / timesRef.current.length) * 100) / 100;
-    const averageTime = tempAvg > 0 ? tempAvg : 0;
-    setAvgTime(averageTime);
+    const tempAvg = timesRef.current.reduce( ( p, c ) => p + c, 0 ) / timesRef.current.length;
+    const averageTimeMS = tempAvg > 0 ? tempAvg : 0;
+    const averageTime = ((averageTimeMS % 60000) / 1000);
+    setAvgTime(Number((averageTime).toFixed(2)));
   }
 
   const calcAvgCorrect = (theAnswer) => {
     const value = theAnswer === 'Y' ? 1 : 0;
     currentTargetRef.current === value ? setAnswers([...answersRef.current, 1]) : setAnswers([...answersRef.current, 0]);
     const tempAvg = Math.round( (answersRef.current.reduce( ( p, c ) => p + c, 0 ) / answersRef.current.length) * 100) / 100;
-    const averageCorrect = tempAvg > 0 ? tempAvg : 0;
-    setAvgCorrect(averageCorrect * 100);
+    const averageCorrect = tempAvg > 0 ? tempAvg * 100: 0;
+    setAvgCorrect(Number((averageCorrect).toFixed(0)));
   }
 
   const howAnswered = (keypressed) => {
@@ -866,7 +867,7 @@ export default function SearchMain() {
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridLeft}>
                 <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxLeft}>
-                  <h3 className={classes.StatTitle}>
+                  <h3 className={classes.StatDataTitle}>
                      Avg Correct
                    </h3>
                    <p className={classes.StatData}>
@@ -879,14 +880,14 @@ export default function SearchMain() {
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridRight}>
                 <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.500' className={classes.statBoxRight}>
-                  <h3 className={classes.StatTitle}>
+                  <h3 className={classes.StatDataTitle}>
                      Avg Time
                    </h3>
                    <p className={classes.StatData}>
                       {avgTime}
                   </p>
                   <p className={classes.StatDataDescription}>
-                     ms
+                     seconds
                  </p>
                 </Box>
               </Grid>
