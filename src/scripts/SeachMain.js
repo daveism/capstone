@@ -745,7 +745,7 @@ export default function SearchMain() {
 
 
     const currentTrialCount = ref.current.length + otherRef.current.length;
-    const percentComplete =  ((trialCount - currentTrialCount) / currentTrialCount) * 100;
+    const percentComplete =  ((trialCount - currentTrialCount) / trialCount) * 100;
     setProgressTrial(percentComplete)
 ;
     setCurrentTarget(targetYesNo);
