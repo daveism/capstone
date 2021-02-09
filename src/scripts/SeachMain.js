@@ -1,6 +1,6 @@
 // TODO:
 //    * data recorder
-//    * remove duplicate fuill color images
+//    * random order for maps
 //    * get and display stats
 //    * add attribute data for baesmaps
 
@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
 
 import RandomMaps from './RandomMaps';
-import RandomMapsNotGestalt from './RandomMapsNotGestalt';
+import RandomMapsNoTarget from './RandomMapsNoTarget';
 import RandomClusteredMaps from './RandomClusteredMaps';
 // css
 import '../css/search.scss';
@@ -356,6 +356,13 @@ export default function SearchMain() {
     _setYesNoDisabled(data);
   };
 
+  const [allExperiments, _setAllExperiments] = useState( ['random-gestalt', 'random-not-gestalt', 'random-clustered-gestalt', 'random-clustered-not-gestalt']);
+  const allExperimentsRef = React.useRef(allExperiments);
+  const setAllExperiments = (data) => {
+    allExperimentsRef.current = data;
+    _setAllExperiments(data);
+  };
+
   const [startDisabled, _setStartDisabled] = useState(true);
   const setStartDisabledRef = React.useRef(startDisabled);
   const setStartDisabled = (data) => {
@@ -382,7 +389,7 @@ export default function SearchMain() {
 
   // random noise background and target is not as gestalt
   const [randomMapsWithTargetNotGestalt,
-    _setRandomMapsWithTargetNotGestalt] = useState(RandomMapsNotGestalt());
+    _setRandomMapsWithTargetNotGestalt] = useState(RandomMapsNoTarget());
   const randomMapsWithTargetNotGestaltRef = React.useRef(randomMapsWithTargetNotGestalt);
   const setRandomMapsWithTargetNotGestalt = (data) => {
     randomMapsWithTargetNotGestaltRef.current = data;
@@ -391,7 +398,7 @@ export default function SearchMain() {
 
   // random noise background and target is not as gestalt missng
   const [randomMapsWithoutTargetNotGestalt,
-    _setRandomMapsWithoutTargetNotGestalt] = useState(RandomMapsNotGestalt());
+    _setRandomMapsWithoutTargetNotGestalt] = useState(RandomMapsNoTarget());
   const randomMapsWithoutTargetNotGestaltRef =
     React.useRef(randomMapsWithoutTargetNotGestalt);
   const setRandomMapsWithoutTargetNotGestalt = (data) => {
@@ -505,6 +512,7 @@ export default function SearchMain() {
   const handleAggree = () => {
     setStartDisabled(false);
     setOpenAggreement(false);
+    setRefAndSets();
     setOpenNext(true);
   };
 
@@ -551,97 +559,60 @@ export default function SearchMain() {
     return mapURL;
   };
 
-  const setRefAndSets = () => {
-    switch (seriesRef.current) {
-      case 'random-gestalt':
-        setMapSets([setRandomMapsWithTargetGestalt,
-          setRandomMapsWithoutTargetGestalt]);
-        setMapRefs([randomMapsWithTargetGestaltRef,
-          randomMapsWithoutTargetGestaltRef]);
-        setTargetExtra('');
-        return undefined;
-      case 'random-not-gestalt':
-        setMapSets([setRandomMapsWithTargetNotGestalt,
-          setRandomMapsWithoutTargetNotGestalt]);
-        setMapRefs([randomMapsWithTargetNotGestaltRef,
-          randomMapsWithoutTargetNotGestaltRef]);
-        setTargetExtra('-not-gestalt');
-        return undefined;
-      case 'random-clustered-gestalt':
-        setMapSets([setRandomMapsClusteredWithTargetGestalt,
-          setRandomMapsClusteredWithoutTargetGestalt]);
-        setMapRefs([randomMapsClusteredWithTargetGestaltRef,
-          randomMapsClusteredWithoutTargetGestaltRef]);
-        setTargetExtra('');
-        return undefined;
-      case 'random-clustered-not-gestalt':
-        setMapSets([setRandomMapsClusteredWithTargetNotGestalt,
-          setRandomMapsClusteredWithoutTargetNotGestalt]);
-        setMapRefs([randomMapsClusteredWithTargetNotGestaltRef,
-          randomMapsClusteredWithoutTargetNotGestaltRef]);
-        setTargetExtra('-not-gestalt');
-        return undefined;
-      default:
-        setMapSets([setRandomMapsWithTargetGestalt,
-          setRandomMapsWithoutTargetGestalt]);
-        setMapRefs([randomMapsWithTargetGestaltRef,
-          randomMapsWithoutTargetGestaltRef]);
-        setTargetExtra('');
-        return undefined;
-    }
-  };
+  // array of the 4 experiments and a way to remove on that has already happend
+  const removeExperiment = (array, mapName) => (array.filter((value) => (value !== mapName)));
 
-  const setNextRefAndSets = () => {
-    switch (seriesRef.current) {
+  const setRefAndSets = () => {
+    if (allExperimentsRef.current.length === 0) {
+      setYesNoDisabled(true);
+      setStartDisabled(true);
+      setSearchMapURL(blankIMG);
+      setTargetMapURL(blankIMG);
+      return null;
+    }
+
+    const experiment = getRandomMap(allExperimentsRef.current);
+    setAllExperiments(removeRandomNumber(allExperimentsRef.current, experiment));
+    switch (experiment) {
       case 'random-gestalt':
-        setMapSets([setRandomMapsWithTargetNotGestalt,
-          setRandomMapsWithoutTargetNotGestalt]);
-        setMapRefs([randomMapsWithTargetNotGestaltRef,
-          randomMapsWithoutTargetNotGestaltRef]);
-        setTargetMapURL(notGestaltTarget);
-        setTargetExtra('-not-gestalt');
-        setSeries('random-not-gestalt');
-        setRefAndSets();
-        return undefined;
-      case 'random-not-gestalt':
-        setMapSets([setRandomMapsClusteredWithTargetGestalt,
-          setRandomMapsClusteredWithoutTargetGestalt]);
-        setMapRefs([randomMapsClusteredWithTargetGestaltRef,
-          randomMapsClusteredWithoutTargetGestaltRef]);
-        setTargetMapURL(gestaltTarget);
-        setTargetExtra('');
-        setSeries('random-clustered-gestalt');
-        setRefAndSets();
-        return undefined;
-      case 'random-clustered-gestalt':
-        setMapSets([setRandomMapsClusteredWithTargetNotGestalt,
-          setRandomMapsClusteredWithoutTargetNotGestalt]);
-        setMapRefs([randomMapsClusteredWithTargetNotGestaltRef,
-          randomMapsClusteredWithoutTargetNotGestaltRef]);
-        setTargetMapURL(notGestaltTarget);
-        setTargetExtra('-not-gestalt');
-        setSeries('random-clustered-not-gestalt');
-        setRefAndSets();
-        return undefined;
-      case 'random-clustered-not-gestalt':
         setMapSets([setRandomMapsWithTargetGestalt,
           setRandomMapsWithoutTargetGestalt]);
         setMapRefs([randomMapsWithTargetGestaltRef,
           randomMapsWithoutTargetGestaltRef]);
-        setTargetMapURL(gestaltTarget);
         setTargetExtra('');
-        setSeries('random-gestalt');
-        setRefAndSets();
+        setTargetMapURL(gestaltTarget);
         return undefined;
-      default:
+      case 'random-not-gestalt':
         setMapSets([setRandomMapsWithTargetNotGestalt,
           setRandomMapsWithoutTargetNotGestalt]);
         setMapRefs([randomMapsWithTargetNotGestaltRef,
           randomMapsWithoutTargetNotGestaltRef]);
-        setTargetMapURL(gestaltTarget);
         setTargetExtra('-not-gestalt');
-        setSeries('random-not-gestalt');
-        setRefAndSets();
+        setTargetMapURL(notGestaltTarget);
+        return undefined;
+      case 'random-clustered-gestalt':
+        setMapSets([setRandomMapsClusteredWithTargetGestalt,
+          setRandomMapsClusteredWithoutTargetGestalt]);
+        setMapRefs([randomMapsClusteredWithTargetGestaltRef,
+          randomMapsClusteredWithoutTargetGestaltRef]);
+        setTargetExtra('');
+        setTargetMapURL(gestaltTarget);
+        return undefined;
+      case 'random-clustered-not-gestalt':
+        setMapSets([setRandomMapsClusteredWithTargetNotGestalt,
+          setRandomMapsClusteredWithoutTargetNotGestalt]);
+        setMapRefs([randomMapsClusteredWithTargetNotGestaltRef,
+          randomMapsClusteredWithoutTargetNotGestaltRef]);
+        setTargetExtra('-not-gestalt');
+        setTargetMapURL(notGestaltTarget);
+        return undefined;
+      default:
+        setMapSets([setRandomMapsWithTargetGestalt,
+          setRandomMapsWithoutTargetGestalt]);
+        setMapRefs([randomMapsWithTargetGestaltRef,
+          randomMapsWithoutTargetGestaltRef]);
+        setTargetExtra('');
+        setTargetMapURL(gestaltTarget);
         return undefined;
     }
   };
@@ -655,16 +626,16 @@ export default function SearchMain() {
   const getNextMap = () => {
     const targetYesNo = getRandomMap([0, 1]);
     const useWith = targetYesNo ? 'with' : 'without';
-    const ref = mapRefs[targetYesNo];
-    const set = mapSets[targetYesNo];
-    const otherRef = mapRefs[targetYesNo ? 0 : 1];
+    const ref = mapRefsRef.current[targetYesNo];
+    const set = mapSetsRef.current[targetYesNo];
+    const otherRef = mapRefsRef.current[targetYesNo ? 0 : 1];
 
     if (ref.current.length === 0 && otherRef.current.length === 0) {
       window.removeEventListener('keydown', handleYNkeyPress); // eslint-disable-line no-use-before-define
       setYesNoDisabled(true);
       setStartDisabled(false);
       setSearchMapURL(blankIMG);
-      setNextRefAndSets();
+      setRefAndSets();
       setOpenNext(true);
       return null;
     }
@@ -709,7 +680,6 @@ export default function SearchMain() {
   const handleStart = (event) => {
     setYesNoDisabled(false);
     setStartDisabled(true);
-    setRefAndSets();
     window.addEventListener('keydown', handleYNkeyPress);
     setTimestamp(Date.now());
     getNextMap();
