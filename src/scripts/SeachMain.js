@@ -1,7 +1,8 @@
 // TODO:
 //    * data recorder
 //    * add attribute data for baesmaps
-
+//    * add percent percentComplete
+// 
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
