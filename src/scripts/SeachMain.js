@@ -230,11 +230,11 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   targetMapImg: {
-    width: '235px',
-    height: '185px',
+    width: '310px',
+    height: '66px',
     [theme.breakpoints.down('sm')]: {
-      height: '125px',
-      width: '158px'
+      width: '225px',
+      height: '48px'
     }
   },
   searchMapImg: {
