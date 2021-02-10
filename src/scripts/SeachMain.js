@@ -1,9 +1,5 @@
 // TODO:
-//    * data recorder
 //    * add attribute data for baesmaps
-//    https://script.google.com/macros/s/AKfycbyuiBMNkqa5WcvtZIVyTXKkVipmceDb33reJmkDjL_ZVLEr9MXFCEnQOg/exec
-
-
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -791,17 +787,17 @@ export default function SearchMain() {
     setAvgCorrect(Number((averageCorrect).toFixed(0)));
   }
 
-  const recordData = (keypressed, yesTime) => {
-    // console.log(`you answered yes in ${yesTime} ms`);
-    console.log('answer', keypressed)
-    console.log('time', yesTime)
-    console.log('hadtarget', currentTargetRef.current === 0 ? 'N' : 'Y' )
-    console.log('searchmapurl', searchMapURLRef.current.replace('https://capstone-images-daveism.s3.amazonaws.com/',''))
-    console.log('targetmapurl', targetMapURLRef.current)
-    console.log('screen', window.screen.width < 960 ? 'small version' : 'large verion')
-    console.log('screen', window.screen.width < 500 ? 'mobile' : 'large')
-
-    // dataRecorder.setEvent('test','2222')
+  const recordData = (answer, timetaken) => {
+    const dataForAPI = {
+      answer,
+      timetaken,
+      hadtarget: currentTargetRef.current === 0 ? 'N' : 'Y',
+      targetmapurl: targetMapURLRef.current,
+      searchmapurl: searchMapURLRef.current.replace('https://capstone-images-daveism.s3.amazonaws.com/',''),
+      screentype: window.innerWidth < 960 ? 'small' : 'large',
+      mobile: window.screen.width < 500 ? 'Y' : 'N'
+    }
+    dataRecorder.setEvent(dataForAPI)
   }
 
   const howAnswered = (keypressed) => {
@@ -813,7 +809,6 @@ export default function SearchMain() {
         calcAvgCorrect(keypressed);
         setTimestamp(Date.now());
         recordData(keypressed, yesTime);
-        // console.log(`you answered yes in ${yesTime} ms`);
         getNextMap();
         return keypressed;
       }
@@ -822,7 +817,6 @@ export default function SearchMain() {
         setTimestamp(Date.now());
         calcAvgCorrect(keypressed);
         calcAvgTime(noTime);
-        // console.log(`you answered no in ${noTime} ms`);
         recordData(keypressed, noTime);
         getNextMap();
         return keypressed;
