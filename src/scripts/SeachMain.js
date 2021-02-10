@@ -1,8 +1,9 @@
 // TODO:
 //    * data recorder
 //    * add attribute data for baesmaps
-//    * add percent percentComplete
-//
+//    https://script.google.com/macros/s/AKfycbyuiBMNkqa5WcvtZIVyTXKkVipmceDb33reJmkDjL_ZVLEr9MXFCEnQOg/exec
+
+
 // mui and react
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -17,6 +18,8 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import RandomMaps from './RandomMaps';
 import RandomMapsNoTarget from './RandomMapsNoTarget';
 import RandomClusteredMaps from './RandomClusteredMaps';
+import DataRecorder from './DataRecorder';
+
 // css
 import '../css/search.scss';
 
@@ -404,7 +407,14 @@ const useStyles = makeStyles((theme) => ({
 
 const experimentTypes = ['random-gestalt', 'random-not-gestalt', 'random-clustered-gestalt', 'random-clustered-not-gestalt'];
 
+
 export default function SearchMain() {
+  const uuid = () => {
+    return crypto.getRandomValues(new Uint32Array(4)).join('-');
+  }
+  const [UID, setUID] = React.useState(uuid());
+  const dataRecorder = new DataRecorder(UID);
+
   const [progressTrial, setProgressTrial] = React.useState(0);
   const [progressOverall, setProgressOverall] = React.useState(0);
   const [trialCount, setTrialCount] = React.useState(0);
@@ -781,6 +791,19 @@ export default function SearchMain() {
     setAvgCorrect(Number((averageCorrect).toFixed(0)));
   }
 
+  const recordData = (keypressed, yesTime) => {
+    // console.log(`you answered yes in ${yesTime} ms`);
+    console.log('answer', keypressed)
+    console.log('time', yesTime)
+    console.log('hadtarget', currentTargetRef.current === 0 ? 'N' : 'Y' )
+    console.log('searchmapurl', searchMapURLRef.current.replace('https://capstone-images-daveism.s3.amazonaws.com/',''))
+    console.log('targetmapurl', targetMapURLRef.current)
+    console.log('screen', window.screen.width < 960 ? 'small version' : 'large verion')
+    console.log('screen', window.screen.width < 500 ? 'mobile' : 'large')
+
+    // dataRecorder.setEvent('test','2222')
+  }
+
   const howAnswered = (keypressed) => {
     if (yesNoDisabledRef.current) return null;
     switch (keypressed) {
@@ -789,7 +812,8 @@ export default function SearchMain() {
         calcAvgTime(yesTime);
         calcAvgCorrect(keypressed);
         setTimestamp(Date.now());
-        console.log(`you answered yes in ${yesTime} ms`);
+        recordData(keypressed, yesTime);
+        // console.log(`you answered yes in ${yesTime} ms`);
         getNextMap();
         return keypressed;
       }
@@ -798,7 +822,8 @@ export default function SearchMain() {
         setTimestamp(Date.now());
         calcAvgCorrect(keypressed);
         calcAvgTime(noTime);
-        console.log(`you answered no in ${noTime} ms`);
+        // console.log(`you answered no in ${noTime} ms`);
+        recordData(keypressed, noTime);
         getNextMap();
         return keypressed;
       }
@@ -905,7 +930,7 @@ export default function SearchMain() {
           <Grid item xs={12} md={4} m={2}display='flex' flex={1}>
 
             <Grid container spacing={0} className={classes.sideMapsHolder}>
-              <Grid onClick={handleOpenNext} item xs={12} display='flex' justifyContent='center' flex={1} className={classes.targetTitle}>
+              <Grid onClick={handleOpenNext} item xs={12} display='flex' flex={1} className={classes.targetTitle}>
                 <h3 className={classes.h3}>Look for this object</h3>
               </Grid>
               <Grid onClick={handleOpenNext} item xs={12} display='flex' flex={1} className={classes.targetMapGrid}>
@@ -952,7 +977,7 @@ export default function SearchMain() {
 
           <Grid item xs={12} md={8} display='flex' flex={1} className={classes.searchMapsGrid}>
             <Grid container spacing={0} display='flex'>
-              <Grid item xs={12} display='flex' justifyContent='flex-start' alignItems='center' flex={1} className={classes.searchMapsTitle}>
+              <Grid item xs={12} display='flex' flex={1} className={classes.searchMapsTitle}>
                 <h3 className={classes.h3}>On this map</h3>
                 <span className={classes.statProgressTrial}>
                   <LinearProgress color='primary' variant="determinate" value={progressTrial} className={classes.statProgressTrialBar}/>
