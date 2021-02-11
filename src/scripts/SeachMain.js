@@ -8,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Modal from '@material-ui/core/Modal';
-import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import RandomMaps from './RandomMaps';
@@ -238,7 +237,6 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   searchMapImg: {
-    borderRadius: '4px',
     height: '500px',
     width: '633px',
     border: `2px solid ${offWhite}`,
@@ -403,12 +401,10 @@ const useStyles = makeStyles((theme) => ({
 
 const experimentTypes = ['random-gestalt', 'random-not-gestalt', 'random-clustered-gestalt', 'random-clustered-not-gestalt'];
 
-
 export default function SearchMain() {
-  const uuid = () => {
-    return crypto.getRandomValues(new Uint32Array(4)).join('-');
-  }
-  const [UID, setUID] = React.useState(uuid());
+  const uuid = () => (crypto.getRandomValues(new Uint32Array(4)).join('-'));
+
+  const [UID, setUID] = React.useState(uuid()); // eslint-disable-line no-unused-vars
   const dataRecorder = new DataRecorder(UID);
 
   const [progressTrial, setProgressTrial] = React.useState(0);
@@ -568,14 +564,6 @@ export default function SearchMain() {
     _setTargetMapURL(data);
   };
 
-  // random-gestalt, random-not-gestalt, random-clustered-gestalt, random-clustered-not-gestalt
-  const [series, _setSeries] = useState('random-gestalt');
-  const seriesRef = React.useRef(series);
-  const setSeries = (data) => {
-    seriesRef.current = data;
-    _setSeries(data);
-  };
-
   // blank string or -not-gestalt
   const [targetExtra, _setTargetExtra] = useState('');
   const targetExtraRef = React.useRef(targetExtra);
@@ -648,12 +636,7 @@ export default function SearchMain() {
   };
 
   // get with or without target array used to retreive the correct map
-  const getWithORwithout = (withORwithout) => (withORwithout === 'with' ? [
-     1, 2, 3, 4, 5, 6, 7, 8, 9,
-     10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-     20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
-     30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-     40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, ] : [0]);
+  const getWithORwithout = (withORwithout) => (withORwithout === 'with' ? [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50] : [0]);
 
   const nextMapURL = (props) => {
     // get target name none or 1-20
@@ -675,9 +658,6 @@ export default function SearchMain() {
     return mapURL;
   };
 
-  // array of the 4 experiments and a way to remove on that has already happend
-  const removeExperiment = (array, mapName) => (array.filter((value) => (value !== mapName)));
-
   const setRefAndSets = () => {
     if (allExperimentsRef.current.length === 0) {
       setYesNoDisabled(true);
@@ -688,8 +668,10 @@ export default function SearchMain() {
     }
 
     const experiment = getRandomMap(allExperimentsRef.current);
-    const percentComplete =  ((experimentTypes.length - allExperimentsRef.current.length) / experimentTypes.length) * 100;
-    setProgressOverall(percentComplete)
+    const percentComplete =
+      ((experimentTypes.length - allExperimentsRef.current.length) / experimentTypes.length) * 100;
+
+    setProgressOverall(percentComplete);
 
     setAllExperiments(removeRandomNumber(allExperimentsRef.current, experiment));
     switch (experiment) {
@@ -700,7 +682,8 @@ export default function SearchMain() {
           randomMapsWithoutTargetGestaltRef]);
         setTargetExtra('');
         setTargetMapURL(gestaltTarget);
-        setTrialCount(randomMapsWithTargetGestaltRef.current.length + randomMapsWithoutTargetGestaltRef.current.length);
+        setTrialCount(randomMapsWithTargetGestaltRef.current.length +
+            randomMapsWithoutTargetGestaltRef.current.length);
         return undefined;
       case 'random-not-gestalt':
         setMapSets([setRandomMapsWithTargetNotGestalt,
@@ -709,7 +692,8 @@ export default function SearchMain() {
           randomMapsWithoutTargetNotGestaltRef]);
         setTargetExtra('-not-gestalt');
         setTargetMapURL(notGestaltTarget);
-        setTrialCount(randomMapsWithTargetNotGestaltRef.current.length + randomMapsWithoutTargetNotGestaltRef.current.length);
+        setTrialCount(randomMapsWithTargetNotGestaltRef.current.length +
+            randomMapsWithoutTargetNotGestaltRef.current.length);
         return undefined;
       case 'random-clustered-gestalt':
         setMapSets([setRandomMapsClusteredWithTargetGestalt,
@@ -718,7 +702,8 @@ export default function SearchMain() {
           randomMapsClusteredWithoutTargetGestaltRef]);
         setTargetExtra('');
         setTargetMapURL(gestaltTarget);
-        setTrialCount(randomMapsClusteredWithTargetGestaltRef.current.length + randomMapsClusteredWithoutTargetGestaltRef.current.length);
+        setTrialCount(randomMapsClusteredWithTargetGestaltRef.current.length +
+            randomMapsClusteredWithoutTargetGestaltRef.current.length);
         return undefined;
       case 'random-clustered-not-gestalt':
         setMapSets([setRandomMapsClusteredWithTargetNotGestalt,
@@ -727,7 +712,8 @@ export default function SearchMain() {
           randomMapsClusteredWithoutTargetNotGestaltRef]);
         setTargetExtra('-not-gestalt');
         setTargetMapURL(notGestaltTarget);
-        setTrialCount(randomMapsClusteredWithTargetNotGestaltRef.current.length + randomMapsClusteredWithoutTargetNotGestaltRef.current.length);
+        setTrialCount(randomMapsClusteredWithTargetNotGestaltRef.current.length +
+            randomMapsClusteredWithoutTargetNotGestaltRef.current.length);
         return undefined;
       default:
         setMapSets([setRandomMapsWithTargetGestalt,
@@ -736,7 +722,8 @@ export default function SearchMain() {
           randomMapsWithoutTargetGestaltRef]);
         setTargetExtra('');
         setTargetMapURL(gestaltTarget);
-        setTrialCount(randomMapsWithTargetGestaltRef.current.length + randomMapsWithoutTargetGestaltRef.current.length);
+        setTrialCount(randomMapsWithTargetGestaltRef.current.length +
+            randomMapsWithoutTargetGestaltRef.current.length);
         return undefined;
     }
   };
@@ -754,11 +741,9 @@ export default function SearchMain() {
     const set = mapSetsRef.current[targetYesNo];
     const otherRef = mapRefsRef.current[targetYesNo ? 0 : 1];
 
-
     const currentTrialCount = ref.current.length + otherRef.current.length;
-    const percentComplete =  ((trialCount - currentTrialCount) / trialCount) * 100;
-    setProgressTrial(percentComplete)
-;
+    const percentComplete = ((trialCount - currentTrialCount) / trialCount) * 100;
+    setProgressTrial(percentComplete);
     setCurrentTarget(targetYesNo);
 
     if (ref.current.length === 0 && otherRef.current.length === 0) {
@@ -776,21 +761,23 @@ export default function SearchMain() {
     return null;
   };
 
-  const calcAvgTime = (timeEllapsed) => {
-    setTimes([...timesRef.current, timeEllapsed]);
-    const tempAvg = timesRef.current.reduce( ( p, c ) => p + c, 0 ) / timesRef.current.length;
+  const calcAvgTime = (timeEllapsedArray) => {
+    setTimes([...timesRef.current, timeEllapsedArray]);
+    const tempAvg = timesRef.current.reduce((p, c) => p + c, 0) / timesRef.current.length;
     const averageTimeMS = tempAvg > 0 ? tempAvg : 0;
     const averageTime = ((averageTimeMS % 60000) / 1000);
     setAvgTime(Number((averageTime).toFixed(2)));
-  }
+  };
 
   const calcAvgCorrect = (theAnswer) => {
     const value = theAnswer === 'Y' ? 1 : 0;
-    currentTargetRef.current === value ? setAnswers([...answersRef.current, 1]) : setAnswers([...answersRef.current, 0]);
-    const tempAvg = Math.round( (answersRef.current.reduce( ( p, c ) => p + c, 0 ) / answersRef.current.length) * 100) / 100;
-    const averageCorrect = tempAvg > 0 ? tempAvg * 100: 0;
+    currentTargetRef.current === value ?
+      setAnswers([...answersRef.current, 1]) : setAnswers([...answersRef.current, 0]);
+    const tempAvg = Math.round((answersRef.current.reduce((p, c) => p + c, 0) /
+      answersRef.current.length) * 100) / 100;
+    const averageCorrect = tempAvg > 0 ? tempAvg * 100 : 0;
     setAvgCorrect(Number((averageCorrect).toFixed(0)));
-  }
+  };
 
   const recordData = (answer, timetaken) => {
     const dataForAPI = {
@@ -798,12 +785,12 @@ export default function SearchMain() {
       timetaken,
       hadtarget: currentTargetRef.current === 0 ? 'N' : 'Y',
       targetmapurl: targetMapURLRef.current,
-      searchmapurl: searchMapURLRef.current.replace('https://capstone-images-daveism.s3.amazonaws.com/',''),
+      searchmapurl: searchMapURLRef.current.replace('https://capstone-images-daveism.s3.amazonaws.com/', ''),
       screentype: window.innerWidth < 960 ? 'small' : 'large',
       mobile: window.screen.width < 500 ? 'Y' : 'N'
-    }
-    dataRecorder.setEvent(dataForAPI)
-  }
+    };
+    dataRecorder.setEvent(dataForAPI);
+  };
 
   const howAnswered = (keypressed) => {
     if (yesNoDisabledRef.current) return null;
