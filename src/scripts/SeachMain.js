@@ -939,7 +939,7 @@ export default function SearchMain() {
               </Grid>
               <Button onClick={handleOpenNext} variant='outlined' color='default' className={classes.buttonsDirecton} height='100%'>Directions</Button>
                 <Grid item xs={12} display='flex' flex={1} className={classes.statTitle}>
-                   {progressOverall}% complete
+                   {progressOverall}% of all trials complete
                 </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.statProgressOverall}>
                 <LinearProgress color='primary' variant="determinate" value={progressOverall} className={classes.statProgress}/>

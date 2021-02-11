@@ -9,7 +9,7 @@
     "predeploy": "npm run build",
     "ghdeploy": "gh-pages -d dist",
     "start": "webpack-dev-server --open --hot --mode development",
-    "build": "webpack --mode production && cp -R src/images dist/src/images",
+    "build": "webpack --mode production && cp -R src/images dist/src",
     "lint": "eslint ./src"
   },
   "license": "MIT",
