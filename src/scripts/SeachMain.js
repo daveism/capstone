@@ -1070,7 +1070,7 @@ export default function SearchMain() {
                     className={classes.searchMapImg}
                     style={{
                       filter: imageLoading ? 'blur(20px)' : 'none',
-                      transition: imageLoading ? 'none' : 'filter 0.5s ease-ou'
+                      transition: imageLoading ? 'none' : 'filter 0.1s ease-out'
                       }}/>
                 </Box>
               </Grid>
