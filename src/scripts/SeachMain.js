@@ -387,9 +387,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     fontSize: '2.75em',
     marginTop: theme.spacing(0),
-    marginBottom: theme.spacing(0),
+    marginBottom: theme.spacing(1),
     color: '#000000',
     [theme.breakpoints.down('sm')]: {
+      marginBottom: theme.spacing(0),
       fontSize: '2.25em'
     }
   },
@@ -429,6 +430,7 @@ export default function SearchMain() {
   const [progressOverall, setProgressOverall] = React.useState(0);
   const [trialCount, setTrialCount] = React.useState(0);
   const [imageLoading, setImageLoading] = React.useState(true);
+  const [lastTimeEllapsed, setLastTimeEllapsed] = React.useState(0);
 
   const [times, _setTimes] = React.useState([]);
   const timesRef = React.useRef(times);
@@ -754,7 +756,10 @@ export default function SearchMain() {
 
   const timeEllapsed = () => {
     const end = Date.now();
-    return end - timestampRef.current;
+    const ms = end - timestampRef.current;
+    const seconds = ((ms % 60000) / 1000);
+    setLastTimeEllapsed(seconds.toFixed(2));
+    return ms;
   };
 
   // gets the net map
@@ -1040,9 +1045,9 @@ export default function SearchMain() {
                    <p className={classes.StatData}>
                       {avgTime}
                   </p>
-                  <p className={classes.StatDataDescription}>
-                     seconds
-                 </p>
+                  <div className={classes.StatDataDescription} style={{ paddingTop: '3px' }}>
+                     Last answer&nbsp;<strong >{lastTimeEllapsed}</strong>
+                 </div>
                 </Box>
               </Grid>
             </Grid>
