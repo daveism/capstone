@@ -431,6 +431,12 @@ export default function SearchMain() {
   const [trialCount, setTrialCount] = React.useState(0);
   const [imageLoading, setImageLoading] = React.useState(true);
   const [lastTimeEllapsed, setLastTimeEllapsed] = React.useState(0);
+  const [entryMethod, _setEntryMethod] = React.useState('');
+  const entryMethodRef = React.useRef(entryMethod);
+  const setEntryMethod = (data) => {
+    entryMethodRef.current = data;
+    _setEntryMethod(data);
+  };
 
   const [times, _setTimes] = React.useState([]);
   const timesRef = React.useRef(times);
@@ -820,12 +826,13 @@ export default function SearchMain() {
   const recordData = (answer, timetaken) => {
     const dataForAPI = {
       answer,
-      timetaken,
       hadtarget: currentTargetRef.current === 0 ? 'N' : 'Y',
+      timetaken,
       targetmapurl: targetMapURLRef.current,
       searchmapurl: searchMapURLRef.current.replace('https://capstone-images-daveism.s3.amazonaws.com/', ''),
+      entrymethod: entryMethodRef.current,
       screentype: window.innerWidth < 960 ? 'small' : 'large',
-      mobile: window.screen.width < 500 ? 'Y' : 'N'
+      mobile: window.screen.width < 500 ? 'Y' : 'N',
     };
     dataRecorder.setEvent(dataForAPI);
   };
@@ -872,9 +879,11 @@ export default function SearchMain() {
 
   const handleYNkeyPress = (event) => {
     if (event.key) {
+      setEntryMethod('keyboard');
       howAnswered(event.key.toUpperCase());
       return null;
     }
+    setEntryMethod('mouse');
     howAnswered(event.target.innerText.toUpperCase() === 'YES' ? 'Y' : 'N');
     return null;
   };

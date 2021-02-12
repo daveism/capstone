@@ -7,13 +7,13 @@ class DataRecorder {
 
   setEvent(props) {
     // get varriables for
-    const dateStamp = new Date().toISOString();
-    const jsondata = { uuid: this.uuid, dateStamp, ...props };
+    const datestamp = new Date().toISOString();
+    const jsondata = { uuid: this.uuid, datestamp, ...props };
     // console.log('recordData', JSON.stringify(jsondata));
 
     const dataAPIURL = new URL(datapi);
     dataAPIURL.search = new URLSearchParams(jsondata);
-    // fetch(dataAPIURL);
+    fetch(dataAPIURL);
   }
 }
 
