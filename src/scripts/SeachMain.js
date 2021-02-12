@@ -14,6 +14,7 @@ import RandomMaps from './RandomMaps';
 import RandomMapsNoTarget from './RandomMapsNoTarget';
 import RandomClusteredMaps from './RandomClusteredMaps';
 import DataRecorder from './DataRecorder';
+import LastAnswer from './LastAnswer';
 
 // css
 import '../css/search.scss';
@@ -392,6 +393,16 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1em',
     color: '#888888',
     marginTop: theme.spacing(0),
+    marginBottom: theme.spacing(0),
+    height: '25px'
+  },
+  StatDataDescriptionSub: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    fontSize: '0.9em',
+    color: '#888888',
+    marginTop: theme.spacing(0),
     marginBottom: theme.spacing(0)
   },
   statProgress: {
@@ -431,6 +442,8 @@ export default function SearchMain() {
     answersRef.current = data;
     _setAnswers(data);
   };
+
+  const [answerCorrect, setAnswerCorrect] = React.useState('none');
 
   const [avgCorrect, _setAvgCorrect] = React.useState([0]);
   const avgCorrectRef = React.useRef(avgCorrect);
@@ -801,6 +814,11 @@ export default function SearchMain() {
         calcAvgCorrect(keypressed);
         setTimestamp(Date.now());
         recordData(keypressed, yesTime);
+        if (currentTargetRef.current === 1) {
+          setAnswerCorrect(true);
+        } else {
+          setAnswerCorrect(false);
+        }
         getNextMap();
         return keypressed;
       }
@@ -810,6 +828,11 @@ export default function SearchMain() {
         calcAvgCorrect(keypressed);
         calcAvgTime(noTime);
         recordData(keypressed, noTime);
+        if (currentTargetRef.current === 1) {
+          setAnswerCorrect(false);
+        } else {
+          setAnswerCorrect(true);
+        }
         getNextMap();
         return keypressed;
       }
@@ -940,8 +963,8 @@ export default function SearchMain() {
                       {avgCorrect}%
                   </p>
                   <p className={classes.StatDataDescription}>
-                     &nbsp;
-                 </p>
+                    <LastAnswer answerCorrect={answerCorrect} />
+                  </p>
                </Box>
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridRight}>
