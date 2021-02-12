@@ -11,6 +11,7 @@ const RandomMapsNoTarget = () => ([
   'distractor-random-high-distractor-color-mixed-basemap-imagery',
   'distractor-random-med-distractor-color-mixed-basemap-imagery',
   'distractor-random-low-distractor-color-mixed-basemap-imagery',
+  'distractor-random-all-distractor-color-matches_target-basemap-none',
   'distractor-random-high-distractor-color-matches_target-basemap-none',
   'distractor-random-med-distractor-color-matches_target-basemap-none',
   'distractor-random-low-distractor-color-matches_target-basemap-none',

@@ -604,6 +604,8 @@ export default function SearchMain() {
   const classes = useStyles();
 
   const [openNext, setOpenNext] = React.useState(false);
+  const [openFinish, setOpenFinish] = React.useState(false);
+
 
   const handleOpenNext = () => {
     setOpenNext(true);
@@ -765,6 +767,10 @@ export default function SearchMain() {
       setStartDisabled(false);
       setSearchMapURL(blankIMG);
       setRefAndSets();
+      if (experimentTypes.length - allExperimentsRef.current.length === experimentTypes.length) {
+        setOpenFinish(true);
+        return null;
+      }
       setOpenNext(true);
       return null;
     }
@@ -859,11 +865,52 @@ export default function SearchMain() {
     getNextMap();
   };
 
+  const bodyFinish = (
+    <div className={classes.nextTargetInfo}>
+      <h1 id='simple-modal-title'>Experiment Complete</h1>
+      <p id='simple-modal-description' className={classes.nextTargetDescription}>
+        Thank you for participating!
+      </p>
+      <Grid container spacing={0} className={classes.sideMapsHolder}>
+        <Grid item xs={6} display='flex' flex={1} className={classes.statGridLeft}>
+          <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.300' className={classes.statBoxLeft}>
+            <h3 className={classes.StatDataTitle}>
+               Avg Correct
+             </h3>
+             <p className={classes.StatData}>
+                {avgCorrect}%
+            </p>
+            <p className={classes.StatDataDescription}>
+               &nbsp;
+           </p>
+         </Box>
+        </Grid>
+        <Grid item xs={6} display='flex' flex={1} className={classes.statGridRight}>
+          <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' m={0} flex={1} border={1} borderColor='grey.300' className={classes.statBoxRight}>
+            <h3 className={classes.StatDataTitle}>
+               Avg Time
+             </h3>
+             <p className={classes.StatData}>
+                {avgTime}
+            </p>
+            <p className={classes.StatDataDescription}>
+               seconds
+           </p>
+          </Box>
+        </Grid>
+      </Grid>
+      <p >
+         &nbsp;
+     </p>
+    </div>
+  );
+
+
   const bodyNext = (
     <div className={classes.nextTargetInfo}>
-      <h2 id='simple-modal-title'>Directions</h2>
+      <h1 id='simple-modal-title'>This is {experimentTypes.length - allExperimentsRef.current.length} of {experimentTypes.length} trials</h1>
       <p id='simple-modal-description' className={classes.nextTargetDescription}>
-        You are looking for the following object on the map,
+        For this trial you are looking for the following object on the map,
         the color of the object will NOT change.
       </p>
       <div className={classes.nextTargetInfoCenter}>
@@ -885,7 +932,7 @@ export default function SearchMain() {
         laptop, or a secondary monitor.
       </p>
       <p id='simple-modal-description' className={classes.nextTargetDescription}>
-        To begin the close this box and then click  <strong>Start Experiment</strong>.
+        To begin the close this box and then click  <strong>Start trial</strong>.
       </p>
       <div className={classes.nextTargetInfoEnd}>
         <Button onClick={handleCloseNext} color='primary' variant='contained' >Close</Button>
@@ -962,9 +1009,9 @@ export default function SearchMain() {
                    <p className={classes.StatData}>
                       {avgCorrect}%
                   </p>
-                  <p className={classes.StatDataDescription}>
+                  <div className={classes.StatDataDescription}>
                     <LastAnswer answerCorrect={answerCorrect} />
-                  </p>
+                  </div>
                </Box>
               </Grid>
               <Grid item xs={6} display='flex' flex={1} className={classes.statGridRight}>
@@ -1006,7 +1053,7 @@ export default function SearchMain() {
 
           <Grid item xs={12} md={4} display='flex' flex={1} className={classes.StartGrid}>
             <Box display='flex' flexDirection='row' m={1} flex={1}>
-              <Button onClick={handleStart} disabled={startDisabled} variant='contained' color='primary' className={classes.buttonsYesNo} height='100%'>Start Experiment</Button>
+              <Button onClick={handleStart} disabled={startDisabled} variant='contained' color='primary' className={classes.buttonsYesNo} height='100%'>Start Trial</Button>
             </Box>
           </Grid>
 
@@ -1024,10 +1071,13 @@ export default function SearchMain() {
         </Grid>
 
       </Grid>
-      <Modal open={openNext} onClose={handleCloseNext} className={classes.nextTargetModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
+      <Modal disableBackdropClick disableEscapeKeyDown open={openNext} onClose={handleCloseNext} className={classes.nextTargetModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
         {bodyNext}
       </Modal>
-      <Modal open={openagreement} onClose={handleDisagree} className={classes.agreementModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
+      <Modal disableBackdropClick disableEscapeKeyDown open={openFinish} className={classes.nextTargetModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
+        {bodyFinish}
+      </Modal>
+  <Modal open={openagreement} onClose={handleDisagree} className={classes.agreementModal} aria-labelledby='simple-modal-title' aria-describedby='simple-modal-description' >
         {bodyagreement}
       </Modal>
     </div>
