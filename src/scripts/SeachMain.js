@@ -105,7 +105,8 @@ const useStyles = makeStyles((theme) => ({
   searchMapGrid: {
     display: 'flex',
     [theme.breakpoints.down('sm')]: {
-      paddingLeft: theme.spacing(2)
+      paddingLeft: theme.spacing(2),
+      paddingTop: theme.spacing(2)
     }
   },
   searchMapHolder: {
@@ -178,7 +179,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
-      display: 'none'
+      marginBottom: theme.spacing(0.5),
+      marginLeft: theme.spacing(5),
+      marginRight: theme.spacing(5)
     }
   },
   statProgressTrialBar: {
@@ -186,7 +189,11 @@ const useStyles = makeStyles((theme) => ({
     height: theme.spacing(1),
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      height: theme.spacing(0.5),
+      marginBottom: theme.spacing(0)
+    }
   },
   targetTitle: {
     height: '60px',
@@ -267,7 +274,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     [theme.breakpoints.down('sm')]: {
-      marginTop: theme.spacing(1.5),
+      marginTop: theme.spacing(0.5),
       marginBottom: theme.spacing(1)
     }
   },
@@ -421,6 +428,7 @@ export default function SearchMain() {
   const [progressTrial, setProgressTrial] = React.useState(0);
   const [progressOverall, setProgressOverall] = React.useState(0);
   const [trialCount, setTrialCount] = React.useState(0);
+  const [imageLoading, setImageLoading] = React.useState(true);
 
   const [times, _setTimes] = React.useState([]);
   const timesRef = React.useRef(times);
@@ -753,6 +761,8 @@ export default function SearchMain() {
   const getNextMap = () => {
     const targetYesNo = getRandomMap([0, 1]);
     const useWith = targetYesNo ? 'with' : 'without';
+    setImageLoading(true);
+    setSearchMapURL(blankIMG);
     const ref = mapRefsRef.current[targetYesNo];
     const set = mapSetsRef.current[targetYesNo];
     const otherRef = mapRefsRef.current[targetYesNo ? 0 : 1];
@@ -851,6 +861,10 @@ export default function SearchMain() {
         return null;
     }
   };
+
+  const handleImageLoad = (event) => {
+    setImageLoading(false);
+  }
 
   const handleYNkeyPress = (event) => {
     if (event.key) {
@@ -1046,7 +1060,14 @@ export default function SearchMain() {
               </Grid>
               <Grid item xs={12} display='flex' flex={1} className={classes.searchMapGrid}>
                 <Box display='flex' flexDirection='row' flex={1} justifyContent='center' alignItems='center' className={classes.searchMapHolder} >
-                  <img src={searchMapURL} className={classes.searchMapImg}/>
+                  <img
+                    src={searchMapURL}
+                    onLoad={handleImageLoad}
+                    className={classes.searchMapImg}
+                    style={{
+                      filter: imageLoading ? 'blur(20px)' : 'none',
+                      transition: imageLoading ? 'none' : 'filter 0.5s ease-ou'
+                      }}/>
                 </Box>
               </Grid>
             </Grid>
