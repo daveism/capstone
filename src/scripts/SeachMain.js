@@ -605,6 +605,7 @@ export default function SearchMain() {
 
   const [openNext, setOpenNext] = React.useState(false);
   const [openFinish, setOpenFinish] = React.useState(false);
+  const [last, setLast] = React.useState(false);
 
 
   const handleOpenNext = () => {
@@ -767,7 +768,10 @@ export default function SearchMain() {
       setStartDisabled(false);
       setSearchMapURL(blankIMG);
       setRefAndSets();
-      if (experimentTypes.length - allExperimentsRef.current.length === experimentTypes.length) {
+      if (allExperimentsRef.current.length === 0) {
+        setLast(true);
+      }
+      if (allExperimentsRef.current.length === 0 && last) {
         setOpenFinish(true);
         return null;
       }
