@@ -762,7 +762,6 @@ export default function SearchMain() {
     const targetYesNo = getRandomMap([0, 1]);
     const useWith = targetYesNo ? 'with' : 'without';
     setImageLoading(true);
-    setSearchMapURL(blankIMG);
     const ref = mapRefsRef.current[targetYesNo];
     const set = mapSetsRef.current[targetYesNo];
     const otherRef = mapRefsRef.current[targetYesNo ? 0 : 1];
