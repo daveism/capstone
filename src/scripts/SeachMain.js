@@ -932,7 +932,7 @@ export default function SearchMain() {
         laptop, or a secondary monitor.
       </p>
       <p id='simple-modal-description' className={classes.nextTargetDescription}>
-        To begin the close this box and then click  <strong>Start trial</strong>.
+        To begin close this box and then click  <strong>Start trial</strong>.
       </p>
       <div className={classes.nextTargetInfoEnd}>
         <Button onClick={handleCloseNext} color='primary' variant='contained' >Close</Button>
