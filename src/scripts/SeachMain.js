@@ -773,6 +773,7 @@ export default function SearchMain() {
       }
       if (allExperimentsRef.current.length === 0 && last) {
         setOpenFinish(true);
+        setProgressOverall(100);
         return null;
       }
       setOpenNext(true);
