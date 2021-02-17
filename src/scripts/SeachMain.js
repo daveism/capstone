@@ -415,6 +415,9 @@ const useStyles = makeStyles((theme) => ({
   },
   statProgress: {
     width: '100%'
+  },
+  FinalDataDescription: {
+    paddingTop: theme.spacing(2),
   }
 }));
 
@@ -931,8 +934,12 @@ export default function SearchMain() {
           </Box>
         </Grid>
       </Grid>
-      <p >
-         &nbsp;
+      <p className={classes.FinalDataDescription}>
+        The purpose of this study is to explore what factors make finding something on a map easy or hard. In
+        particular, we manipulated Gestalt principles of perceptual organization such as similarity, continuation
+        and proximity in a visual-search-like task to see how they affected the ability to detect the target of
+        a tornado-track projected onto varying landscape backgrounds and clutter. We hope to learn what map features
+        designers can change in order to make searching on a map easier.
      </p>
     </div>
   );
